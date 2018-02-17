@@ -1,0 +1,5 @@
+for prog in test*.c
+do
+    aux/one "$1" $prog "$2"
+done
+

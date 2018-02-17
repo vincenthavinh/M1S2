@@ -1,0 +1,16 @@
+##############################################################
+BASE_DIR	= /0/cma/fb/development/fairthreads-in-C/ft_v1.1
+VERSION		= ft_v1.1
+
+########## where file produced will be placed ################
+FT_LIBDIR       = $(BASE_DIR)/lib/$(VERSION)
+FT_INCLDIR      = $(BASE_DIR)/include/$(VERSION)
+
+########### standard C compiler ##############################
+C_COMPILER    = gcc
+
+############ ar and ranlib ###################################
+AR            = ar
+RANLIB        = ranlib
+
+##############################################################

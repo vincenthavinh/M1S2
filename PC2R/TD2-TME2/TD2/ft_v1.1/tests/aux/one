@@ -1,0 +1,7 @@
+##########################################
+echo "test of $2";
+$1 $2 $3
+aux/extractresult.sh $2 > aux/EXPECTED
+a.out | diff -w aux/EXPECTED -
+
+##########################################

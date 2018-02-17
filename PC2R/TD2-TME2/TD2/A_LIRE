@@ -1,0 +1,4 @@
+A compiler avec :
+
+gcc -o prodconsft prodconsft.c traceinstantsf.c -I /Vrac/PC2R/ft_v1.1/include/ft_v1.1 -L /Vrac/PC2R/ft_v1.1/lib/ft_v1.1 -lfthread -lpthread
+

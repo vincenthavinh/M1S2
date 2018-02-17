@@ -1,0 +1,47 @@
+package dataflow.examples.fact;
+
+import java.math.BigInteger;
+
+import dataflow.core.Composite;
+import dataflow.core.IntEvent;
+import dataflow.core.IntEventReceiverService;
+import dataflow.core.Printer;
+import dataflow.core.RequireIntEventReceiverService;
+import dataflow.examples.basics.GenInt;
+import dataflow.generators.GenConst;
+import dataflow.operators.Add;
+import dataflow.operators.Mul;
+
+
+/*
+ * 
+ * Exercice 2 -- Question 3
+ * 
+ * A compléter  
+ * 
+ */
+
+public class GenFact implements Composite,
+			/* require */
+			RequireIntEventReceiverService {
+
+	private Add add;
+	private GenConst gen;
+	
+	public GenFact() {
+		gen = new GenConst(1);
+		add = new Add();
+		
+	}	
+	
+	@Override
+	public void bindIntEventReceiverService(IntEventReceiverService serv) {
+		add.bindIntEventReceiverService(serv);
+	}
+		
+	@Override
+	public void activate() {
+		// TODO
+	}
+
+}
