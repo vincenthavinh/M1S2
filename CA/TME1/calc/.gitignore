@@ -1,6 +1,6 @@
 *.cmi
 *.cmo
 *.mli
-calc;
+calc
 lexer.ml
 parser.ml
