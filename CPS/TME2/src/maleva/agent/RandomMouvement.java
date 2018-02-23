@@ -21,9 +21,10 @@ public class RandomMouvement extends ComportementAgent {
 	/* LCStepperController */
 	
 	public boolean step() throws LifeCycleException {
-
-                // A COMPLETER
-
-		return false;
+		super.outer.setAngle(super.outer.getAngle() + 2*(rand.nextInt(angle_step+1)) - angle_step);
+		
+		action = new Action(Action.MOVE, super.outer.getAngle());
+		return true; // step is finished
+		
 	}
 }
