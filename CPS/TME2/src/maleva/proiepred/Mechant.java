@@ -82,11 +82,12 @@ public class Mechant extends Agent {
 		super.step();
 
 		capteur.step();
-                if(suivre.step()) {
-			System.out.println("Mechant '"+getID()+"' sees agents, follow");
+		
+        if(suivre.step()) {
+			System.out.println("Mechant '"+getID()+"' sees agents, follows");
 			return effecteur.step();
 		} else if(rndmvt.step()) {
-			System.out.println("Mechant '"+getID()+"' sees nothing or cannot follow");
+			//System.out.println("Mechant '"+getID()+"' sees nothing or cannot follow");
 			return effecteur.step();
 		}		
 		System.out.println("Mechant '"+getID()+"' cannot do anything");

@@ -27,9 +27,9 @@
           description="run examples">
     <!--<echo>================ Run Maleva simulator ================</echo>-->
     <java classname="maleva.proiepred.MalevaTest2" classpath="${build}">
-       <arg value="200" description="numSteps"/>
-       <arg value="2" description="numMechants"/>
-       <arg value="3" description="numTrouillards"/>
+       <arg value="500" description="numSteps"/>
+       <arg value="3" description="numMechants"/>
+       <arg value="7" description="numTrouillards"/>
     </java>
   </target>
 

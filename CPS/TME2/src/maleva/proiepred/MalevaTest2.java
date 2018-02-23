@@ -42,12 +42,12 @@ public class MalevaTest2 {
 
                         for (Agent m : mechants) {
                           m.configure(env, rand.nextInt(sizeX), rand.nextInt(sizeY));
-                          m.setSpeed(4);
+                          m.setSpeed(7);
                           m.setAngle(rand.nextInt(360));
                         }
                         for (Agent t : trouillards) {
 		          t.configure(env, rand.nextInt(sizeX), rand.nextInt(sizeY));
-                          t.setSpeed(3);  // Slower than the Mechant.
+                          t.setSpeed(7);  // Slower than the Mechant.
                           t.setAngle(rand.nextInt(360));
                         }
 

@@ -21,7 +21,7 @@ public class FuirAgent extends ComportementAgent {
 		AgentRef[] arefs = arls.getAgentRefs();
 		if(arefs==null) {
 			action = null; // cannot take any decision
-			System.out.println("FuirAgent failed for "+outer.getID());
+			//System.out.println("FuirAgent failed for "+outer.getID());
 			return false; // step not finished
 		}
 		

@@ -3,6 +3,7 @@ package maleva.agent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import maleva.framework.BasicComponent;
 
@@ -64,6 +65,15 @@ EnvironmentEffectService {
 			// Compute the distance.
                         int dist = computeDist(sight.getX(),sight.getY(),fromx,fromy);
 			if(dist > vdist) continue;  // Too far!
+			if(dist == 0) {
+				System.out.println("TOOOOOOOOOOOOOOUUUUUUUUUUUUHCCCCCCHEEEEEEEEEEEEEEEEEE");
+				try {
+					TimeUnit.SECONDS.sleep(5);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 
                         // Compute the angle of view.
                         int viewAngle = 0;

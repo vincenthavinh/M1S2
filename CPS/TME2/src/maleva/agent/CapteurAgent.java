@@ -27,7 +27,7 @@ LCStepperController {
 	
 	public CapteurAgent(Agent outer) {
 		efs = null;
-		view_dist = 100;
+		view_dist = 50;
 		last_seen_agents = null;
 		this.outer = outer;
 	}

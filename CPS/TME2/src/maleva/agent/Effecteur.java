@@ -68,7 +68,7 @@ LCStepperController {
 		}
 		String debugStr = "[Effecteur] Received action = " + act;
 		if(act==null || !act.isMove()) {
-			System.out.println(debugStr);
+			//System.out.println(debugStr);
                         return false;
                 }
 
@@ -97,7 +97,7 @@ LCStepperController {
                        debugStr += "; After: X'="+outer.getPosX();
 		debugStr += "Y'="+outer.getPosY();
 		debugStr += "Angle'="+outer.getAngle();
-                System.out.println(debugStr);
+                //System.out.println(debugStr);
 		return true;
 	}
 }
