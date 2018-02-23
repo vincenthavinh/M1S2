@@ -1,9 +1,0 @@
-*~
-*.cmi
-*.cmo
-alex.ml
-asyn.ml
-intertypeur
-intereval
-ml2java
-*.class

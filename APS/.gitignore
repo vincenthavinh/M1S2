@@ -1,6 +1,0 @@
-*.cmo
-*.cmi
-toProlog
-lexer.ml
-parser.mli
-parser.ml

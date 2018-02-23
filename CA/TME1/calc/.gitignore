@@ -1,6 +1,0 @@
-*.cmi
-*.cmo
-*.mli
-calc
-lexer.ml
-parser.ml
