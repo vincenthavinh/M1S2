@@ -66,9 +66,9 @@ EnvironmentEffectService {
                         int dist = computeDist(sight.getX(),sight.getY(),fromx,fromy);
 			if(dist > vdist) continue;  // Too far!
 			if(dist == 0) {
-				System.out.println("TOOOOOOOOOOOOOOUUUUUUUUUUUUHCCCCCCHEEEEEEEEEEEEEEEEEE");
+				System.out.println("TOOOOOOOOOOOOOOUUUUUUUUUUUUHCCCCCCHEEEEEEEEEEEEEEEEEE (sleep 2s)");
 				try {
-					TimeUnit.SECONDS.sleep(5);
+					TimeUnit.SECONDS.sleep(2);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
