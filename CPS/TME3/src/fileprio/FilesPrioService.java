@@ -16,10 +16,10 @@ public interface FilesPrioService<T> {
 	public T getElem();			//\pre getSize() > 0
 	public T getElemPrio(int i, int k); 	//\pre i \in getActivePrios() \and getSizePrio(i)>=k \and k>0
 
-	/*Constructor*/
+	/* Constructor */
 	
 	public void init();
-	// \post getSize()=0
+	// \post getSize() == 0
 
 	/* Invariants */
 	

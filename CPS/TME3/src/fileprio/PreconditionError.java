@@ -2,6 +2,6 @@ package fileprio;
 
 public class PreconditionError extends Error{
 	public PreconditionError(String message) {
-		super(message);
+		super("PreconditionError: "+message);
 	}
 }
