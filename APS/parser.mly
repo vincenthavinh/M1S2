@@ -4,25 +4,53 @@ open Ast
 
 %token <int> NUM
 %token <string> IDENT
-%token PLUS MINUS TIMES DIV
+%token ADD SUB MUL DIV
 %token LPAR RPAR
 %token EOL
 
-%start line				/* the entry point */
+%token TRUE FALSE
+%token ECHO
+%token LCROC RCROC
+%token SEMICOLON
+%token CONST
+%token INT BOOL
 
-%type <Ast.expr> line
+%start prog			/* the entry point */
+
+%type <Ast.cmds> prog
 
 %%
 
-line:
-		expr EOL { $1 }
+prog:
+	  LCROC cmds RCROC { $2 }
+	;
+
+cmds:
+	  stat { ASTcmd($1) }
+	/*| dec SEMICOLON cmds { ASTcmds2($1, $3) }*/
+	| stat SEMICOLON cmds { ASTcmds($1, $3) }
+	;
+
+/*dec:
+	  CONST IDENT tyype expr { ASTconst($3) }
+	;*/
+
+stat:
+	  ECHO expr { ASTecho($2) }
 	;
 
 expr:
-		NUM { ASTNum($1) }
-	| IDENT { ASTId($1) }
-	| LPAR PLUS expr expr RPAR { ASTPrim(Ast.Add, $3, $4) }
-	| LPAR MINUS expr expr RPAR { ASTPrim(Ast.Sub, $3, $4) }
-	| LPAR TIMES expr expr RPAR { ASTPrim(Ast.Mul, $3, $4) }
-	| LPAR DIV expr expr RPAR { ASTPrim(Ast.Div, $3, $4) }
+	  TRUE { ASTbool(Ast.True) }
+	| FALSE { ASTbool(Ast.False) }
+	| NUM { ASTnum($1) }
+	| IDENT { ASTid($1) }
+	| LPAR ADD expr expr RPAR { ASToprim(Ast.Add, $3, $4) }
+	| LPAR SUB expr expr RPAR { ASToprim(Ast.Sub, $3, $4) }
+	| LPAR MUL expr expr RPAR { ASToprim(Ast.Mul, $3, $4) }
+	| LPAR DIV expr expr RPAR { ASToprim(Ast.Div, $3, $4) }
 	;
+
+/*tyype:
+	  INT { ASTtprim(Ast.Int) }
+	| BOOL { ASTtprim(Ast.Bool) }
+	;*/

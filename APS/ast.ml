@@ -1,20 +1,34 @@
-type op = Add | Mul | Sub | Div
+(*type tprim =
+	  Int
+	| Bool*)
 
-let string_of_op op =
-	match op with
-			Add -> "add"
-		| Mul -> "mul"
-		| Sub -> "sub"
-		| Div -> "div"
+type oprim = 
+	  Add 
+	| Mul 
+	| Sub 
+	| Div
 
-let op_of_string op =
-	match op with
-			"add" -> Add
-		| "mul" -> Mul
-		| "sub" -> Sub
-		| "div" -> Div
+type bool = 
+	  True 
+	| False
+
+
+(*type tyype =
+	  ASTtprim of tprim*)
 
 type expr =
-		ASTNum of int
-	| ASTId of string
-	| ASTPrim of op * expr * expr
+	  ASTnum of int
+	| ASTid of string
+	| ASToprim of oprim * expr * expr
+	| ASTbool of bool
+
+type stat = 
+	  ASTecho of expr
+
+(*type dec =
+	  ASTconst of tyype*)
+
+type cmds =
+	  ASTcmd of stat
+	| ASTcmds of stat * cmds
+	(*| ASTcmds2 of dec * cmds*)

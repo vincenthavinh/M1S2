@@ -4,5 +4,5 @@ type expr =
   | Integer of int
   
 type stmt =
-  | Print of [expr]
+  | Print of expr
 

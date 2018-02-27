@@ -1,5 +1,5 @@
-LEX_ML = ocamllex
-YACC_ML = /usr/local/bin/ocamlyacc
+LEX_ML = /usr/bin/ocamllex
+YACC_ML = /usr/bin/ocamlyacc
 OCAMLC = ocamlc
 
 toProlog: parser toProlog.ml

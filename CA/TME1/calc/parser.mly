@@ -20,9 +20,7 @@ calc : stmt EOL { $1 }
 stmts : stmt { $1 }
       | stmt SEMICOLON stmts { $1; $3 };
 
-stmt : PRINT exprs { Print($2) };
-
-exprs 
+stmt : PRINT expr { Print($2) };
 
 expr : expr PLUS expr { Add($1, $3) }
      | term  { $1 };
