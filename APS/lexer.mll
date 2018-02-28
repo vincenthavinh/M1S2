@@ -12,6 +12,10 @@ rule token = parse
 	| '(' 							{ LPAR }
 	| ')' 							{ RPAR }
 	| ';' 							{ SEMICOLON }
+	| ',' 							{ COMMA }
+	| ':' 							{ COLONS }
+	| '*' 							{ ASTERISK }
+	| "->" 							{ VECTOR }
 
 (* ensemble oprim *)
 	| "add" 						{ ADD }
