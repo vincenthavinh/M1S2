@@ -4,10 +4,7 @@
 }
 
 rule token = parse
-	  [' ' '\t'] 					{ token lexbuf } (* skip blanks *)
-	| ['\n' ] 						{ EOL }
-	| eof 							{ raise Eof }
-
+	 eof 							{ raise Eof }
 
 (* symboles reserves *)
 	| '[' 							{ LCROC }
@@ -24,8 +21,8 @@ rule token = parse
 
 
 (* ensemble tprim *)
-(*	| "int" 						{ INT }
-	| "bool" 						{ BOOL }*)
+	| "int" 						{ INT }
+	| "bool" 						{ BOOL }
 
 (* mots clef *)
 	| "CONST" 						{ CONST }
@@ -40,5 +37,9 @@ rule token = parse
 
 (* ensemble ident *)
 	| (['a'-'z''A'-'Z'])(['a'-'z''A'-'Z''0'-'9'])* as lxm { IDENT(lxm)}
+
+(* separateurs *)
+	| [' ' '\t'] 					{ token lexbuf } (* skip blanks *)
+	| ['\n' ] 						{ EOL }
 
 

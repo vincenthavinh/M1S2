@@ -1,6 +1,6 @@
-(*type tprim =
+type tprim =
 	  Int
-	| Bool*)
+	| Bool
 
 type oprim = 
 	  Add 
@@ -12,21 +12,20 @@ type bool =
 	  True 
 	| False
 
-
-(*type tyype =
-	  ASTtprim of tprim*)
-
 type expr =
 	  ASTnum of int
 	| ASTid of string
 	| ASToprim of oprim * expr * expr
 	| ASTbool of bool
 
+type tyype =
+	  ASTtprim of tprim
+
 type stat = 
 	  ASTecho of expr
 
 type dec =
-	  ASTconst of expr
+	  ASTconst of string * tyype * expr
 
 type cmd =
 	  ASTstat of stat	

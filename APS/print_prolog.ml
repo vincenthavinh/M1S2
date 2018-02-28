@@ -2,7 +2,12 @@ open Ast
 
 (* ------- conversion noeuds AST -> Print in Prolog ------- *)
 
-let string_of_op x =
+let string_of_tprim x =
+	match x with
+		  Int -> "int"
+		| Bool -> "bool"
+
+let string_of_oprim x =
 	match x with
 		  Add -> "add"
 		| Mul -> "mul"
@@ -27,7 +32,7 @@ let rec print_prolog_expr x =
 		| ASTid a -> Printf.printf"\"%s\"" a
 		| ASToprim(a, b, c) -> 
 			(
-				Printf.printf"%s" (string_of_op a);
+				Printf.printf"%s" (string_of_oprim a);
 				Printf.printf"(";
 				print_prolog_expr b;
 				Printf.printf",";
@@ -36,13 +41,22 @@ let rec print_prolog_expr x =
 			)
 		| ASTbool a -> Printf.printf"%s" (string_of_bool a)
 
+let rec print_prolog_tyype x =
+	match x with
+		  ASTtprim a -> Printf.printf"%s" (string_of_tprim a)
+
 let print_prolog_stat x =
 	match x with
 		  ASTecho a -> print_prolog_expr a
 
 let print_prolog_dec x =
 	match x with
-		  ASTconst a -> print_string "ASTconst"
+		  ASTconst (a, b ,c) -> 
+		  	(
+		  		print_prolog_tyype b;
+		  		Printf.printf" %s = " a;
+		  		print_prolog_expr c
+		  	)
 
 let print_prolog_cmd x =
 	match x with

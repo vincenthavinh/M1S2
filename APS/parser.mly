@@ -2,18 +2,14 @@
 open Ast
 %}
 
+%token LCROC RCROC LPAR RPAR SEMICOLON
+%token ADD SUB MUL DIV
+%token INT BOOL
+%token CONST ECHO
+%token TRUE FALSE
 %token <int> NUM
 %token <string> IDENT
-%token ADD SUB MUL DIV
-%token LPAR RPAR
 %token EOL
-
-%token TRUE FALSE
-%token ECHO
-%token LCROC RCROC
-%token SEMICOLON
-%token CONST
-%token INT BOOL
 
 %start prog			/* the entry point */
 
@@ -32,7 +28,7 @@ cmds:
 	;
 
 dec:
-	  CONST IDENT expr { ASTconst($3) }
+	  CONST IDENT tyype expr { ASTconst($2, $3, $4) }
 	;
 
 stat:
@@ -50,7 +46,7 @@ expr:
 	| LPAR DIV expr expr RPAR { ASToprim(Ast.Div, $3, $4) }
 	;
 
-/*tyype:
+tyype:
 	  INT { ASTtprim(Ast.Int) }
 	| BOOL { ASTtprim(Ast.Bool) }
-	;*/
+	;
