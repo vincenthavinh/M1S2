@@ -5,7 +5,7 @@ open Ast
 %token LCROC RCROC LPAR RPAR SEMICOLON
 %token ADD SUB MUL DIV
 %token INT BOOL
-%token CONST ECHO
+%token IF CONST ECHO
 %token TRUE FALSE
 %token <int> NUM
 %token <string> IDENT
@@ -40,6 +40,7 @@ expr:
 	| FALSE { ASTbool(Ast.False) }
 	| NUM { ASTnum($1) }
 	| IDENT { ASTid($1) }
+	| LPAR IF expr expr expr RPAR { ASTif($3, $4, $5) }
 	| LPAR ADD expr expr RPAR { ASToprim(Ast.Add, $3, $4) }
 	| LPAR SUB expr expr RPAR { ASToprim(Ast.Sub, $3, $4) }
 	| LPAR MUL expr expr RPAR { ASToprim(Ast.Mul, $3, $4) }

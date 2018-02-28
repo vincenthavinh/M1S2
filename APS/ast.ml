@@ -13,10 +13,11 @@ type bool =
 	| False
 
 type expr =
-	  ASTnum of int
+	  ASTbool of bool
+	| ASTnum of int
 	| ASTid of string
+	| ASTif of expr * expr * expr
 	| ASToprim of oprim * expr * expr
-	| ASTbool of bool
 
 type tyype =
 	  ASTtprim of tprim

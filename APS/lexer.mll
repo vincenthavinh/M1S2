@@ -25,6 +25,7 @@ rule token = parse
 	| "bool" 						{ BOOL }
 
 (* mots clef *)
+	| "if" 							{ IF }
 	| "CONST" 						{ CONST }
 	| "ECHO" 						{ ECHO }
 

@@ -28,8 +28,18 @@ let string_of_bool x =
 
 let rec print_prolog_expr x =
 	match x with
-		  ASTnum a -> Printf.printf"%d" a
+		  ASTbool a -> Printf.printf"%s" (string_of_bool a)
+		| ASTnum a -> Printf.printf"%d" a
 		| ASTid a -> Printf.printf"\"%s\"" a
+		| ASTif (a, b, c) ->
+			(
+				Printf.printf"if ";
+				print_prolog_expr a;
+				Printf.printf"\nthen ";
+				print_prolog_expr b;
+				Printf.printf"\nelse ";
+				print_prolog_expr c; 
+			)
 		| ASToprim(a, b, c) -> 
 			(
 				Printf.printf"%s" (string_of_oprim a);
@@ -39,7 +49,6 @@ let rec print_prolog_expr x =
 				print_prolog_expr c;
 				Printf.printf")"
 			)
-		| ASTbool a -> Printf.printf"%s" (string_of_bool a)
 
 let rec print_prolog_tyype x =
 	match x with
