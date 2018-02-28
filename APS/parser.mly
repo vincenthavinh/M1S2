@@ -3,9 +3,9 @@ open Ast
 %}
 
 %token LCROC RCROC LPAR RPAR SEMICOLON COMMA COLONS ASTERISK VECTOR
-%token ADD SUB MUL DIV
+%token NOT AND OR EQ LT ADD SUB MUL DIV
 %token INT BOOL
-%token IF CONST ECHO
+%token IF CONST FUN REC ECHO
 %token TRUE FALSE
 %token <int> NUM
 %token <string> IDENT

@@ -18,6 +18,11 @@ rule token = parse
 	| "->" 							{ VECTOR }
 
 (* ensemble oprim *)
+	| "not" 						{ NOT }
+	| "and" 						{ AND }
+	| "or" 							{ OR }
+	| "eq" 							{ EQ }
+	| "lt" 							{ LT }
 	| "add" 						{ ADD }
 	| "sub" 						{ SUB }
 	| "mul" 						{ MUL }
@@ -31,6 +36,8 @@ rule token = parse
 (* mots clef *)
 	| "if" 							{ IF }
 	| "CONST" 						{ CONST }
+	| "FUN" 						{ FUN }
+	| "REC" 						{ REC }
 	| "ECHO" 						{ ECHO }
 
 (* ensemble bool *)
