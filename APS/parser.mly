@@ -26,14 +26,14 @@ prog:
 	;
 
 cmds:
-	  stat { ASTcmd($1) }
-	/*| dec SEMICOLON cmds { ASTcmds2($1, $3) }*/
-	| stat SEMICOLON cmds { ASTcmds($1, $3) }
+	  stat { ASTstat($1) }
+	| dec SEMICOLON cmds { ASTcmds(ASTdec($1), $3) }
+	| stat SEMICOLON cmds { ASTcmds(ASTstat($1), $3) }
 	;
 
-/*dec:
-	  CONST IDENT tyype expr { ASTconst($3) }
-	;*/
+dec:
+	  CONST IDENT expr { ASTconst($3) }
+	;
 
 stat:
 	  ECHO expr { ASTecho($2) }

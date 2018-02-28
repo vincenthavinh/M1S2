@@ -9,7 +9,7 @@ RemoteSystemsTempFiles/
 APS/*.cmo
 APS/*.cmi
 APS/toProlog
-APSlexer.ml
+APS/lexer.ml
 APS/parser.mli
 APS/parser.ml
 

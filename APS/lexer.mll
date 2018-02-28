@@ -6,21 +6,39 @@
 rule token = parse
 	  [' ' '\t'] 					{ token lexbuf } (* skip blanks *)
 	| ['\n' ] 						{ EOL }
-	| ('-'?)['0'-'9']+ as lxm 		{ NUM(int_of_string lxm) }
+	| eof 							{ raise Eof }
+
+
+(* symboles reserves *)
+	| '[' 							{ LCROC }
+	| ']' 							{ RCROC }
+	| '(' 							{ LPAR }
+	| ')' 							{ RPAR }
+	| ';' 							{ SEMICOLON }
+
+(* ensemble oprim *)
 	| "add" 						{ ADD }
 	| "sub" 						{ SUB }
 	| "mul" 						{ MUL }
 	| "div" 						{ DIV }
-	| '(' 							{ LPAR }
-	| ')' 							{ RPAR }
-	| eof 							{ raise Eof }
 
+
+(* ensemble tprim *)
+(*	| "int" 						{ INT }
+	| "bool" 						{ BOOL }*)
+
+(* mots clef *)
+	| "CONST" 						{ CONST }
+	| "ECHO" 						{ ECHO }
+
+(* ensemble bool *)
 	| "true" 						{ TRUE }
 	| "false" 						{ FALSE }
-	| "ECHO" 						{ ECHO }
-	| '[' 							{ LCROC }
-	| ']' 							{ RCROC }
-	| ';' 							{ SEMICOLON }
-(*	| "CONST" 						{ CONST }
-	| "int" 						{ INT }
-	| "bool" 						{ BOOL }*)
+
+(* ensemble num *)
+	| ('-'?)['0'-'9']+ as lxm 		{ NUM(int_of_string lxm) }
+
+(* ensemble ident *)
+	| (['a'-'z''A'-'Z'])(['a'-'z''A'-'Z''0'-'9'])* as lxm { IDENT(lxm)}
+
+

@@ -25,10 +25,13 @@ type expr =
 type stat = 
 	  ASTecho of expr
 
-(*type dec =
-	  ASTconst of tyype*)
+type dec =
+	  ASTconst of expr
+
+type cmd =
+	  ASTstat of stat	
+	| ASTdec of dec
 
 type cmds =
-	  ASTcmd of stat
-	| ASTcmds of stat * cmds
-	(*| ASTcmds2 of dec * cmds*)
+	  ASTstat of stat
+	| ASTcmds of cmd * cmds
