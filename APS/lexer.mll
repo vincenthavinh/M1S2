@@ -15,7 +15,7 @@ rule token = parse
 	| ',' 							{ COMMA }
 	| ':' 							{ COLONS }
 	| '*' 							{ ASTERISK }
-	| "->" 							{ VECTOR }
+	| "->" 							{ ARROW }
 
 (* ensemble oprim *)
 	| "not" 						{ NOT }
