@@ -1,5 +1,6 @@
 package fileprio;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public interface FilesPrioService<T> {
@@ -8,7 +9,7 @@ public interface FilesPrioService<T> {
 
 	public int getSize();
 	public boolean isEmpty();
-	public Set<Integer> getActivePrios();
+	public ArrayList<Integer> getActivePrios();
 	public boolean isActive(int i);
 	public int getMaxPrio();
 	public int getSizePrio(int i);

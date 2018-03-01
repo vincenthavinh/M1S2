@@ -1,5 +1,6 @@
 package fileprio;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
@@ -29,7 +30,7 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			
 			// \keyword \max0 renvoie le max d'un ensemble ou zéro si l'ensemble est vide
 			// \inv \min getMaxPrio() == \max0 getActivePrios()
-			int max = 0;
+			int max = getMaxPrio();
 			for(Integer i : getActivePrios()) {if(i>max) max=i;}
 			if(getMaxPrio() != max)
 				throw new InvariantError("\\inv \\min getMaxPrio() == \\max0 getActivePrios()");
@@ -41,7 +42,7 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			}
 			
 			// \inv \min getElem() == getPrio(getMaxPrio())
-			if(getElem() != getPrio(getMaxPrio()))
+			if(getSize()>0 && getElem() != getPrio(getMaxPrio()))
 				throw new InvariantError("\\inv \\min getElem() == getPrio(getMaxPrio())");
 			
 			// \inv \forall i:int \with i \in getActivePrios() { getSizePrio(i)>0 }
@@ -82,7 +83,7 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 		}
 
 		@Override
-		public Set<Integer> getActivePrios() {
+		public ArrayList<Integer> getActivePrios() {
 			return super.getActivePrios();
 		}
 
@@ -145,21 +146,30 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			
 			// \post getSize() == 0
 			if(getSize() != 0) throw new PostconditionError("\\post getSize() ==  0");
+			
 		}
 
 		/* Operators */
 		
 		@Override
-		// TODO putPrio
+		// TODO putPrio -> forall
 		public void putPrio(int i, T e) {
 			
 			/*preconditions*/
 			// \pre i>= 0 \and e!=null
+			if(i<0 || e==null) {
+				throw new PreconditionError("\\pre i>= 0 \\and e!=nul");
+			}
 			
 			/*invariants*/
 			checkInvariants();
 			
 			/*captures*/
+			ArrayList<Integer> getActivePrios_atpre = getActivePrios();
+			boolean isActive_atpre = isActive(i);
+			int sizePrio_atpre = getSizePrio(i);
+			Set<T> j ;
+			
 			
 			/*traitement*/
 			super.putPrio(i, e);
@@ -176,6 +186,24 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			// \post \forall j:int \with j \in getActivePrios()@pre \less i {
 			// 				 \forall k:int \with k>=1 \and k<=getSizePrio(j)@pre { 
 			//						 getElemPrio(j,k) == getElemPrio(j,k)@pre }}
+			
+			if(isActive_atpre) {
+				if(getActivePrios()!=getActivePrios_atpre) {
+					throw new PostconditionError("\\post isActive(i)@pre \\imp getActivePrios() == getActivePrios()@pre");
+				}
+			}
+			else {
+				getActivePrios_atpre.add(i);
+				if(getActivePrios()!=getActivePrios_atpre) {
+					throw new PostconditionError("\\post \\not isActive(i)@pre \\imp getActivePrios() == getActivePrios()@pre \\ union i");
+				}
+			}
+			
+			if(getSizePrio(i)!=sizePrio_atpre+1) {
+				throw new PostconditionError("post getSizePrio(i) == getSizePrio(i)@pre + 1");
+			}
+			
+			/*constantes*/
 		}
 
 		@Override
@@ -191,6 +219,11 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			checkInvariants();
 			
 			/*captures*/
+			int getMaxPrio_atpre = getMaxPrio();
+			T e_atpre = e;
+			T e_atpost = e;
+			
+			
 			/*COMMENT CAPTURER/CLONER LE FILEPRIOSERVICE DANS SON ETAT PRE PUT(E)?*/
 			
 			/*traitement*/
@@ -200,8 +233,14 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			checkInvariants();
 			
 			/*postconditions*/
-			
 			// \post put(e) = putPrio(e,getMaxPrio()@pre)@pre
+			put(e_atpost);
+			putPrio(getMaxPrio_atpre,e_atpre);
+			
+			if(e_atpost!=e_atpre) {
+				throw new PostconditionError("// \\post put(e) = putPrio(e,getMaxPrio()@pre)@pre");
+			}
+			
 			/*COMMENT VERIF LES POSTCONDITIONS D'UNE OBSERVATION QUI EST UNE DEFINITION ?*/
 		}
 
@@ -211,11 +250,18 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 
 			/*preconditions*/
 			// \pre getSizePrio(i) > 0
+			if(getSizePrio(i)<=0) {
+				throw new PreconditionError("\\pre getSizePrio(i) > 0");
+			}
 			
 			/*invariants*/
 			checkInvariants();
 			
 			/*captures*/
+			ArrayList<Integer> getActivePrios_atpre = getActivePrios();
+			boolean isActive_atpre = isActive(i);
+			int sizePrio_atpre = getSizePrio(i);
+			
 			
 			/*traitement*/
 			super.removePrio(i);
@@ -232,6 +278,24 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			// \post \forall j:int \with j \in getActivePrios()@pre \less i {
 			// 				 \forall k:int \with k>=1 \and k<=getSizePrio(j)@pre { 
 			//						 getElemPrio(j,k) = getElemPrio(j,k)@pre }}
+			
+			if(sizePrio_atpre > 1) {
+				if(getActivePrios()!=getActivePrios_atpre) {
+					throw new PostconditionError("\\post getSizePrio(i)@pre > 1 \\imp getActivePrios() = getActivePrios()@pre");
+				}
+			}
+			else if(sizePrio_atpre == 1) {
+				ArrayList<Integer> getActivePrios_atmid = getActivePrios();
+				getActivePrios_atmid.remove(i);
+				if(getActivePrios()!=getActivePrios_atmid) {
+					throw new PostconditionError("\\post getSizePrio(i)@pre = 1 \\imp getActivePrios() = getActivePrios()@pre \\less i");
+				}
+			}
+			
+			if(getSizePrio(i)!=sizePrio_atpre-1) {
+				throw new PostconditionError("\\post getSizePrio(i) = getSizePrio(i)@pre-1");
+			}
+			
 		}
 
 		@Override
@@ -240,16 +304,19 @@ public class FilesPrioContract<T> extends FilesPrioDecorator<T> {
 			
 			/*preconditions*/
 			// \pre getSize(i)>0
+		
 			
 			/*invariants*/
 			checkInvariants();
 			
 			/*captures*/
+			ArrayList<Integer> getActivePrios_atpre = getActivePrios();
+
 			
 			/*traitement*/
 			super.remove();
 
-			/*invariants*/
+			/*invariants*/		
 			checkInvariants();
 			
 			/*postconditions*/

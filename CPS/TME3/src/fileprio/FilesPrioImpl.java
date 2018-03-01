@@ -1,80 +1,129 @@
 package fileprio;
 
-import java.util.Set;
+import java.util.ArrayList;
 
-public class FilesPrioImpl<T> implements FilesPrioService {
+public class FilesPrioImpl<T> implements FilesPrioService<T> {
 	private int size;
 	private boolean empty;
-	private Set<Integer> activePrios;
-	private boolean active;
+	private ArrayList<Integer> activePrios;
+	private ArrayList<T> elems;
 	private int maxPrio;
-	private int sizePrio;
-	private T elem;
-	private T elemPrio;
 	
-	@Override
-	public void init() {
-		// TODO Auto-generated method stub
+	public FilesPrioImpl() {
 		
 	}
+	
+	public FilesPrioImpl(FilesPrioImpl f) {
+		this.size = f.getSize();
+		this.empty = f.isEmpty();
+		this.activePrios = new ArrayList<Integer>();
+		for(int i=0; i< f.getActivePrios().size(); i++) {
+			this.activePrios.set(i, (Integer) f.getActivePrios().get(i));
+		}
+		this.maxPrio = f.getMaxPrio();
+	}
+
+	@Override
+	public void init() {
+		this.size=0;
+		this.maxPrio=0;
+		this.empty=true;
+		activePrios = new ArrayList<Integer>();
+		elems = new ArrayList<T>();
+	}
+	
 	@Override
 	public int getSize() {
-		return size;
+		return activePrios.size();
 	}
+	
 	@Override
 	public boolean isEmpty() {
 		return empty;
 	}
+	
 	@Override
-	public Set getActivePrios() {
+	public ArrayList<Integer> getActivePrios() {
 		return activePrios;
 	}
+	
 	@Override
 	public boolean isActive(int i) {
-		return active;
+		return this.getActivePrios().contains(i);
 	}
+	
 	@Override
 	public int getMaxPrio() {
-		return maxPrio;
+		int max = 0;
+		for(int i : activePrios) {
+			if(i>max) max=i;
+		}
+		return max;
 	}
+	
 	@Override
 	public int getSizePrio(int i) {
-		// TODO Auto-generated method stub
-		return 0;
+		//count prio i in fileprio
+		int sizep=0;
+		for(int z : activePrios) {
+			if(z == i) {
+				sizep++;
+			}
+		}
+		return sizep;
 	}
+	
 	@Override
-	public Object getPrio(int i) {
-		// TODO Auto-generated method stub
-		return null;
+	public T getPrio(int i) {
+		int pos = this.activePrios.indexOf(i);
+		T prio = elems.get(pos);
+		return prio;
 	}
+	
 	@Override
-	public Object getElem() {
-		return elem;
+	public T getElem() {
+		return getPrio(this.activePrios.indexOf(this.getMaxPrio()));
 	}
+	
 	@Override
-	public Object getElemPrio(int i, int k) {
-		// TODO Auto-generated method stub
-		return null;
+	public T getElemPrio(int i, int k) {
+		int compteur = 0;
+		int pos = -1;
+		for(int j=0; j< activePrios.size(); j++) {
+			if(activePrios.get(j) == i) compteur++;
+			if( compteur == k) {
+				pos = j;
+				break;
+			}
+		}
+		T elemprio = elems.get(pos);
+		return elemprio;
 	}
+	
 	@Override
-	public void putPrio(int i, Object e) {
-		// TODO Auto-generated method stub
-		
+	public void putPrio(int i, T e) {
+		activePrios.add(i);
+		elems.add(e);
+		empty=false;
 	}
+	
 	@Override
-	public void put(Object e) {
-		// TODO Auto-generated method stub
+	public void put(T e) {
+		putPrio(maxPrio, e);
 		
 	}
 	@Override
 	public void removePrio(int i) {
-		// TODO Auto-generated method stub
+		int pos = this.activePrios.indexOf(i);
+		elems.remove(pos);
+		activePrios.remove(pos);
 		
+		if(activePrios.size()==0) empty=true;
 	}
+	
 	@Override
 	public void remove() {
-		// TODO Auto-generated method stub
-		
+		removePrio(maxPrio);		
 	}
 
 }

@@ -1,5 +1,6 @@
 package fileprio;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public abstract class FilesPrioDecorator<T> implements FilesPrioService<T> {
@@ -18,7 +19,7 @@ public abstract class FilesPrioDecorator<T> implements FilesPrioService<T> {
 		return delegate.isEmpty();
 	}
 
-	public Set<Integer> getActivePrios() {
+	public ArrayList<Integer> getActivePrios() {
 		return delegate.getActivePrios();
 	}
 
