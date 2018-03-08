@@ -54,6 +54,24 @@ let rec print_prolog_tyype x =
 	match x with
 		  ASTtprim a -> Printf.printf"%s" (string_of_tprim a)
 
+let print_prolog_arg x =
+	match x with
+		  ASTarg (a, b) ->
+			(
+				print_prolog_tyype b;
+		  		Printf.printf" %s" a;
+		  	)
+
+let rec print_prolog_args x =
+	match x with
+		  [] -> ()
+		| e::l -> 
+			(
+				print_prolog_arg e;
+				if l!=[] then print_string ", ";
+				print_prolog_args l
+			)
+
 let print_prolog_stat x =
 	match x with
 		  ASTecho a -> print_prolog_expr a
@@ -66,22 +84,39 @@ let print_prolog_dec x =
 		  		Printf.printf" %s = " a;
 		  		print_prolog_expr c
 		  	)
+		| ASTfun(a, b ,c ,d) ->
+			(
+				print_prolog_tyype b;
+				Printf.printf" %s(" a;
+				print_prolog_args c;
+				Printf.printf") {return ";
+				print_prolog_expr d;
+				Printf.printf" ;}";
+			)
+		| ASTfunrec(a, b ,c ,d) ->
+			(
+				print_prolog_tyype b;
+				Printf.printf" %s(" a;
+				print_prolog_args c;
+				Printf.printf") RECURSIF {return ";
+				print_prolog_expr d;
+				Printf.printf" ;}";
+			)
+				
 
 let print_prolog_cmd x =
 	match x with
-		  ASTdec a -> print_prolog_dec a
-		| ASTstat a -> print_prolog_stat a
+		  ASTdec a -> print_string "ASTdec " ; print_prolog_dec a
+		| ASTstat a -> print_string "ASTstat " ; print_prolog_stat a
 
 
-let rec print_prolog_cmds x =
+let rec print_prolog_prog x =
 	match x with
-		  ASTstat a -> print_prolog_stat a
-		| ASTcmds(a, b) ->
+		  [] -> ()
+		| e::l -> 
 			(
-				print_prolog_cmd a;
-				print_char '\n';
-				print_prolog_cmds b
+				print_prolog_cmd e; 
+				print_newline ();
+				print_prolog_prog l
 			)
-
-
 

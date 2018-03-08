@@ -58,77 +58,51 @@ let make_apply e l = it_list (function a -> function b -> App (a,b)) e l;;
 
 %%
 implementation :
-        Expr SEMISEMI
-          { Expr $1 }
-      | LET IDENT EQUAL Expr SEMISEMI
-	  { Decl (Let(false,$2,$4))}
-      | LET REC IDENT EQUAL Expr SEMISEMI
-	  { Decl (Let(true,$3,$5))}
-      | EOF
-          { raise End_of_file }
-;
+	  Expr SEMISEMI 						{ Expr $1 }
+	| LET IDENT EQUAL Expr SEMISEMI 		{ Decl (Let(false,$2,$4))}
+	| LET REC IDENT EQUAL Expr SEMISEMI 	{ Decl (Let(true,$3,$5))}
+	| EOF 									{ raise End_of_file }
+	;
 
 
 /* Expressions */
 
 Expr :
-        Simple_expr
-          { $1 }
-      | Simple_expr Simple_expr_list   %prec prec_app
-	  {make_apply $1 $2}
-      | REF Expr
-	  {Ref $2}
-      | Simple_expr COMMA Expr
-	  {Pair ($1,$3)}
-      | Simple_expr  COLONCOLON Expr
-	  {Cons ($1,$3)}
-      | Simple_expr  COLONEQUAL Expr
-	  {Binop (":=",$1,$3)}
-      | Simple_expr INFIX Expr 
-	  { Binop ($2, $1,$3)}
-      | Simple_expr EQUAL Expr
-          { Binop ("=",$1,$3)}
-      | IF Expr THEN Expr ELSE Expr  %prec prec_if
-          { Cond($2, $4, $6) }
-      | IF Expr THEN Expr  %prec prec_if
-          { Cond($2, $4, Const Unit)}
-      | LET IDENT EQUAL Expr IN Expr  %prec prec_let
-          { Letin (false,$2,$4,$6) }
-      | LET REC IDENT EQUAL Expr  IN Expr  %prec prec_let
-          { Letin (true,$3,$5,$7) }
-      | FUNCTION IDENT MINUSGREATER Expr
-          { Abs($2,$4) }
-;
+	  Simple_expr 											{ $1 }
+	| Simple_expr Simple_expr_list   %prec prec_app 		{make_apply $1 $2}
+	| REF Expr 												{Ref $2}
+	| Simple_expr COMMA Expr 								{Pair ($1,$3)}
+	| Simple_expr  COLONCOLON Expr 							{Cons ($1,$3)}
+	| Simple_expr  COLONEQUAL Expr 							{Binop (":=",$1,$3)}
+	| Simple_expr INFIX Expr								{ Binop ($2, $1,$3)}
+	| Simple_expr EQUAL Expr 								{ Binop ("=",$1,$3)}
+	| IF Expr THEN Expr ELSE Expr  %prec prec_if 			{ Cond($2, $4, $6) }
+	| IF Expr THEN Expr  %prec prec_if 						{ Cond($2, $4, Const Unit)}
+	| LET IDENT EQUAL Expr IN Expr  %prec prec_let 			{ Letin (false,$2,$4,$6) }
+	| LET REC IDENT EQUAL Expr  IN Expr  %prec prec_let 	{ Letin (true,$3,$5,$7) }
+	| FUNCTION IDENT MINUSGREATER Expr 						{ Abs($2,$4) }
+	;
+	
 Simple_expr :
-        Struct_constant
-          { Const $1 }
-      | IDENT
-	  {Var $1}
-      | LPAREN RPAREN
-          { Const  Unit }
-      | LBRACKET RBRACKET
-         { Const Emptylist}
-      | LPAREN Expr RPAREN
-          { $2 }
-      | PREFIX Simple_expr
-          { Unop ( $1,$2)}
-;
+	  Struct_constant 		{ Const $1 }
+	| IDENT 				{Var $1}
+	| LPAREN RPAREN 		{ Const  Unit }
+	| LBRACKET RBRACKET 	{ Const Emptylist}
+	| LPAREN Expr RPAREN 	{ $2 }
+	| PREFIX Simple_expr 	{ Unop ( $1,$2)}
+	;
 
 
 Simple_expr_list :
-        Simple_expr Simple_expr_list
-          { $1 :: $2 }
-      | Simple_expr
-          { [$1] }
-;
+	  Simple_expr Simple_expr_list 		{ $1 :: $2 }
+	| Simple_expr 						{ [$1] }
+	;
+	
 Struct_constant :
-        INT
-          { Int $1 }
-      | FLOAT
-          { Float $1 }
-      | STRING
-          { String  $1 }
-;
+	  INT 			{ Int $1 }
+	| FLOAT 		{ Float $1 }
+	| STRING 		{ String  $1 }
+	;
 
 
 %%

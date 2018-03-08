@@ -32,11 +32,23 @@ CA/TME3/code/Java/intereval
 CA/TME3/code/Java/ml2java
 CA/TME3/code/Java/*.class
 
+CA/TME4/code/Java/*~
+CA/TME4/code/Java/*.cmi
+CA/TME4/code/Java/*.cmo
+CA/TME4/code/Java/alex.ml
+CA/TME4/code/Java/asyn.ml
+CA/TME4/code/Java/intertypeur
+CA/TME4/code/Java/intereval
+CA/TME4/code/Java/ml2java
+CA/TME4/code/Java/*.class
+
 #CPS
 
 CPS/TME1/bin/
 CPS/TME2/build/
 CPS/TME3/bin/
+CPS/TME4/bin/
+CPS/TME4/build/
 
 #PC2R
 

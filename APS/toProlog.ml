@@ -7,6 +7,6 @@ let _ =
 	try
 		let lexbuf = Lexing.from_channel stdin in
 		let x = Parser.prog Lexer.token lexbuf in
-		print_prolog_cmds x;
+		print_prolog_prog x;
 		print_char '\n'
 	with Lexer.Eof -> exit 0

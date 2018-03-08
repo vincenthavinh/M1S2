@@ -24,24 +24,21 @@ type tyype =
 	  ASTtprim of tprim
 	| Todo
 
-(*type arg =
+type arg =
 	  ASTarg of string * tyype
-
-type args =
-	  ASTarg of arg
-	| ASTargs of arg * args*)
 
 type stat = 
 	  ASTecho of expr
 
 type dec =
 	  ASTconst of string * tyype * expr
-	| Todo
+	| ASTfun of string * tyype * arg list * expr
+	| ASTfunrec of string * tyype * arg list * expr
 
 type cmd =
 	  ASTstat of stat	
 	| ASTdec of dec
 
-type cmds =
-	  ASTstat of stat
-	| ASTcmds of cmd * cmds
+type prog = 
+	  cmd list
+

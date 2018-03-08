@@ -1,0 +1,1 @@
+[FUN REC a int [ x : int, y : bool ] 3; ECHO 6]
