@@ -52,7 +52,7 @@ public class Bridge implements
 
 	@Override
 	public void init() {
-		init(200); // petit "bug" lié à l'inclusion des init par héritage en Java
+		this.init(200); // petit "bug" lié à l'inclusion des init par héritage en Java
 	}
 
 

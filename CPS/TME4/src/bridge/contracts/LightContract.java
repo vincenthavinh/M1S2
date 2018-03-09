@@ -3,7 +3,7 @@ package bridge.contracts;
 import bridge.decorators.LightDecorator;
 import bridge.services.LightService;
 
-public class LightContract extends LightDecorator {
+public class LightContract extends LightDecorator implements LightService{
 
 	public LightContract(LightService delegate) {
 		super(delegate);

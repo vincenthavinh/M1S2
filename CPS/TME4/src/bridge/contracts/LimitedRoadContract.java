@@ -72,7 +72,7 @@ public class LimitedRoadContract extends LimitedRoadDecorator {
 		// run
 		super.enter();
 		
-		// int post
+		// inv post
 		checkInvariant();
 		
 		// post: getNbCars() == getNbCars()@pre + 1 

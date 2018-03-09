@@ -1,7 +1,7 @@
 package bridge.services;
 
 public interface LimitedRoadService extends /* include */ RoadSectionService {
-	/** Observateur : nombre max. de voitures sur la section limitée */
+	/** Observateur Const: nombre max. de voitures sur la section limitée */
 	public int getLimit();
 	/** Observateur : pont plein ? */
 	public boolean isFull();
