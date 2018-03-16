@@ -29,8 +29,8 @@ public class LiftContract extends LiftDecorator {
 				throw new InvariantError("La porte n'est pas fermée pendant le déplacement");
 			}
 		} else if(getLiftStatus()==LiftStatus.IDLE) {
-			if(!(getDoorStatus()==DoorStatus.OPENED)) {
-				throw new InvariantError("La porte n'est pas ouverte pendant l'attente");
+			if(!(getDoorStatus()==DoorStatus.OPENED || getDoorStatus()==DoorStatus.CLOSED || getDoorStatus()==DoorStatus.OPENING || getDoorStatus()==DoorStatus.CLOSING)) {
+				throw new InvariantError("La porte n'est pas ouverte pendant l'attente" + getDoorStatus());
 			}
 		}
 	}
@@ -43,15 +43,16 @@ public class LiftContract extends LiftDecorator {
 		}
 		
 		// pre: minLevel < maxLevel
-		if(!(maxLevel > 0)) {
-			throw new PreconditionError("L'étage maximum n'est pas positif");
+		if(!(maxLevel > minLevel)) {
+			throw new PreconditionError("L'étage maximum est inférieur à l'étage minimum");
 		}
 		
 		// inv pre
-		checkInvariant();
+		//checkInvariant();
 		
 		// run
 		super.init(minLevel, maxLevel);
+		
 		
 		// inv post
 		checkInvariant();
@@ -192,7 +193,11 @@ public class LiftContract extends LiftDecorator {
 		}
 		
 		// post: getCommands().endUpCommand();
-		// TODO
+		try{
+		getCommands().endUpCommand();
+		}catch(Error e){
+			throw new PostconditionError("impossible de stopper la montée");
+		}
 
 	}
 	
@@ -294,7 +299,11 @@ public class LiftContract extends LiftDecorator {
 		}
 		
 		// post: getCommands().endDownCommand();
-		// TODO
+		try{
+			getCommands().endUpCommand();
+			}catch(Error e){
+				throw new PostconditionError("impossible de stopper la descente");
+			}
 
 	}
 
@@ -329,14 +338,16 @@ public class LiftContract extends LiftDecorator {
 	
 	
 	@Override
+	
 	public void closeDoor() {
 		// pre: getDoorStatus() == OPENED
 		if(!(getDoorStatus() == DoorStatus.OPENED)) {
 			throw new PreconditionError("La porte n'est pas ouverte");
 		}
-		// pre: getLiftStatus() \in { STANDBY_UP, STANDBY_DOWN }
+		// pre: getLiftStatus() \in {IDLE, STANDBY_UP, STANDBY_DOWN }
+		//Erreur contrat : il manque le status IDLE
 		if(!(getLiftStatus() == LiftStatus.STANDBY_UP
-			|| getLiftStatus() == LiftStatus.STANDBY_DOWN)) {
+			|| getLiftStatus() == LiftStatus.STANDBY_DOWN || getLiftStatus() == LiftStatus.IDLE)) {
 			throw new PreconditionError("L'ascenseur n'est pas en stand-by");
 		}
 	
@@ -448,7 +459,27 @@ public class LiftContract extends LiftDecorator {
 		//        then getCommands().addUpCommand(level)
 		//        else if level < getLevel()
 		//        then getCommands().addDownCommand(level)
-		// TODO
+		if(level>getLevel()){
+			try{
+				getCommands().addUpCommand(level);
+			}
+			catch(Error e){
+				throw new PostconditionError("Ne peux pas choisir de monter");
+			}
+		}
+		else if(level<getLevel()){
+			try{
+				getCommands().addDownCommand(level);
+			}
+			catch(Error e){
+				throw new PostconditionError("Ne peux pas choisir de descendre");
+			}
+			
+		}
+		
+		else{
+			throw new PostconditionError("Vous êtes déjà à cet étage");
+		}
 	}
 	
 }

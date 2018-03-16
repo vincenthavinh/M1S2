@@ -5,14 +5,17 @@ import liftimpl1.Lift1;
 import liftimpl2.Lift2;
 import liftimpl3.Lift3;
 
-public class LiftTest1 extends AbstractLiftTest{
+public class Lift1Test extends AbstractLiftTest{
 
 
 	
 	@Override
 	public void beforeTests() {
-		setLift(new LiftContract(new Lift3()));
+		LiftContract lc = new LiftContract(new Lift1());
+		setLift(lc);
+		lc.toString();
 	}
+	
 
 	
 	

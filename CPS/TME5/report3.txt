@@ -1,67 +1,16 @@
-Testsuite: lift.test.Lift1Test
-Tests run: 46, Failures: 14, Errors: 9, Skipped: 0, Time elapsed: 0,06 sec
+Testsuite: lift.test.Lift3Test
+Tests run: 46, Failures: 14, Errors: 9, Skipped: 0, Time elapsed: 0,042 sec
 
-Testcase: testInitNegatif took 0,007 sec
+Testcase: testInitPositif took 0,006 sec
+Testcase: testInitNegatif took 0 sec
 Testcase: testInitNegatif2 took 0 sec
-Testcase: testBeginMoveUpPositif took 0,003 sec
+Testcase: testBeginMoveUpPositif took 0,002 sec
 	FAILED
 post BeginMoveUpPositif
 junit.framework.AssertionFailedError: post BeginMoveUpPositif
 	at lift.test.AbstractLiftTest.testBeginMoveUpPositif(AbstractLiftTest.java:131)
 
 Testcase: testBeginMoveUpNegatif took 0 sec
-Testcase: testBeginMoveUpNegatif2 took 0,001 sec
-Testcase: testStepMoveUpPositif took 0 sec
-	FAILED
-truc
-junit.framework.AssertionFailedError: truc
-	at lift.test.AbstractLiftTest.testStepMoveUpPositif(AbstractLiftTest.java:190)
-
-Testcase: testStepMoveUpNegatif took 0 sec
-Testcase: testStepMoveUpNegatif2 took 0 sec
-Testcase: testEndMoveUpPositif took 0 sec
-	FAILED
-truc
-junit.framework.AssertionFailedError: truc
-	at lift.test.AbstractLiftTest.testEndMoveUpPositif(AbstractLiftTest.java:246)
-
-Testcase: testEndMoveUpNegatif took 0 sec
-Testcase: testEndMoveUpNegatif2 took 0 sec
-Testcase: testBeginMoveDownPositif took 0 sec
-Testcase: testBeginMoveDownNegatif took 0 sec
-Testcase: testBeginMoveDownNegatif2 took 0 sec
-Testcase: testStepMoveDownPositif took 0 sec
-	FAILED
-Truc
-junit.framework.AssertionFailedError: Truc
-	at lift.test.AbstractLiftTest.testStepMoveDownPositif(AbstractLiftTest.java:360)
-
-Testcase: testStepMoveDownNegatif took 0,001 sec
-Testcase: testStepMoveDownNegatif2 took 0 sec
-Testcase: testEndMoveDownPositif took 0 sec
-	FAILED
-truc
-junit.framework.AssertionFailedError: truc
-	at lift.test.AbstractLiftTest.testEndMoveDownPositif(AbstractLiftTest.java:415)
-
-Testcase: testEndMoveDownNegatif took 0,001 sec
-Testcase: testEndMoveDownNegatif2 took 0 sec
-Testcase: testOpenDoorPositif took 0 sec
-	FAILED
-truc
-junit.framework.AssertionFailedError: truc
-	at lift.test.AbstractLiftTest.testOpenDoorPositif(AbstractLiftTest.java:472)
-
-Testcase: testInitPositif took 0 sec
-Testcase: testOpenDoorNegatif took 0 sec
-Testcase: testOpenDoorNegatif2 took 0 sec
-Testcase: testCloseDoorPositif took 0 sec
-	FAILED
-truc
-junit.framework.AssertionFailedError: truc
-	at lift.test.AbstractLiftTest.testCloseDoorPositif(AbstractLiftTest.java:521)
-
-Testcase: testCloseDoorNegatif took 0 sec
 Testcase: testCloseDoorNegatif2 took 0 sec
 Testcase: testDoorAckPositif took 0,001 sec
 	FAILED
@@ -82,7 +31,7 @@ truc
 junit.framework.AssertionFailedError: truc
 	at lift.test.AbstractLiftTest.testSelectLevelPositif(AbstractLiftTest.java:612)
 
-Testcase: testSelectLevelPositif2 took 0 sec
+Testcase: testSelectLevelPositif2 took 0,001 sec
 	FAILED
 truc
 junit.framework.AssertionFailedError: truc
@@ -96,7 +45,7 @@ junit.framework.AssertionFailedError: truc
 
 Testcase: testSelectLevelNegatif took 0 sec
 Testcase: testSelectLevelNegatif2 took 0 sec
-Testcase: testTransitionInit took 0,001 sec
+Testcase: testTransitionInit took 0 sec
 	FAILED
 commands init == new Commands()
 junit.framework.AssertionFailedError: commands init == new Commands()
@@ -116,7 +65,7 @@ lift.contracts.PreconditionError: Precondition failed: L'ascenseur n'est pas pr√
 	at lift.contracts.LiftContract.beginMoveUp(LiftContract.java:106)
 	at lift.test.AbstractLiftTest.testTransitionStepMoveUp(AbstractLiftTest.java:725)
 
-Testcase: testTransitionEndMoveUp took 0,001 sec
+Testcase: testTransitionEndMoveUp took 0 sec
 	Caused an ERROR
 Precondition failed: L'ascenseur ne monte pas
 lift.contracts.PreconditionError: Precondition failed: L'ascenseur ne monte pas
@@ -173,3 +122,54 @@ java.lang.IllegalStateException: Cannot insert '4': already in list
 	at lift.contracts.LiftContract.selectLevel(LiftContract.java:464)
 	at lift.test.AbstractLiftTest.testTransitionSelectLevel(AbstractLiftTest.java:866)
 
+Testcase: testBeginMoveUpNegatif2 took 0 sec
+Testcase: testStepMoveUpPositif took 0,001 sec
+	FAILED
+truc
+junit.framework.AssertionFailedError: truc
+	at lift.test.AbstractLiftTest.testStepMoveUpPositif(AbstractLiftTest.java:190)
+
+Testcase: testStepMoveUpNegatif took 0 sec
+Testcase: testStepMoveUpNegatif2 took 0 sec
+Testcase: testEndMoveUpPositif took 0,001 sec
+	FAILED
+truc
+junit.framework.AssertionFailedError: truc
+	at lift.test.AbstractLiftTest.testEndMoveUpPositif(AbstractLiftTest.java:246)
+
+Testcase: testEndMoveUpNegatif took 0 sec
+Testcase: testEndMoveUpNegatif2 took 0 sec
+Testcase: testBeginMoveDownPositif took 0 sec
+Testcase: testBeginMoveDownNegatif took 0 sec
+Testcase: testBeginMoveDownNegatif2 took 0 sec
+Testcase: testStepMoveDownPositif took 0 sec
+	FAILED
+Truc
+junit.framework.AssertionFailedError: Truc
+	at lift.test.AbstractLiftTest.testStepMoveDownPositif(AbstractLiftTest.java:360)
+
+Testcase: testStepMoveDownNegatif took 0 sec
+Testcase: testStepMoveDownNegatif2 took 0 sec
+Testcase: testEndMoveDownPositif took 0,001 sec
+	FAILED
+truc
+junit.framework.AssertionFailedError: truc
+	at lift.test.AbstractLiftTest.testEndMoveDownPositif(AbstractLiftTest.java:415)
+
+Testcase: testEndMoveDownNegatif took 0 sec
+Testcase: testEndMoveDownNegatif2 took 0 sec
+Testcase: testOpenDoorPositif took 0 sec
+	FAILED
+truc
+junit.framework.AssertionFailedError: truc
+	at lift.test.AbstractLiftTest.testOpenDoorPositif(AbstractLiftTest.java:472)
+
+Testcase: testOpenDoorNegatif took 0 sec
+Testcase: testOpenDoorNegatif2 took 0 sec
+Testcase: testCloseDoorPositif took 0 sec
+	FAILED
+truc
+junit.framework.AssertionFailedError: truc
+	at lift.test.AbstractLiftTest.testCloseDoorPositif(AbstractLiftTest.java:521)
+
+Testcase: testCloseDoorNegatif took 0 sec

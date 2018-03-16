@@ -1,23 +1,99 @@
 package lift.contracts;
 
+import java.util.Random;
+
 import lift.decorators.CommandsDecorator;
 import lift.services.CommandsService;
 
 public class CommandsContract extends CommandsDecorator {
-	
+
 	public CommandsContract(CommandsService delegate) {
 		super(delegate);
 	}
-	
+
 	public void checkInvariant() {
+		Random rand = new Random();
 		// inv: hasUpCommand(Integer cmd) 
 		//      ==  \exists i \in [0..getNbUpCommands()-1] { getUpCommand(i) == cmd }
-		// TODO
-		
+		int cmd1 = getUpCommand(rand.nextInt(getNbUpCommands()));
+		int cmd2 = cmd1 * 2;
+		int cmd3 = cmd1 / 2;
+		if(hasUpCommand(cmd1)){
+			boolean pres = false;
+			for(int i = 0 ; i < getNbUpCommands(); i++){
+				if(getUpCommand(i) == cmd1) pres = true;
+			}
+
+			if(!pres){
+				throw new InvariantError("Commande innacessible");
+			}
+		}
+
+		if(hasUpCommand(cmd2)){
+			boolean pres2 = false;
+			for(int i = 0 ; i < getNbUpCommands(); i++){
+				if(getUpCommand(i) == cmd2) pres2 = true;
+			}
+
+			if(!pres2){
+				throw new InvariantError("Commande innacessible");
+			}
+		}
+
+		if(hasUpCommand(cmd3)){
+			boolean pres3 = false;
+			for(int i = 0 ; i < getNbUpCommands(); i++){
+				if(getUpCommand(i) == cmd3) pres3 = true;
+			}
+
+			if(!pres3){
+				throw new InvariantError("Commande innacessible");
+			}
+		}
+
+
+
 		// inv: hasDownCommand(Integer cmd) 
 		//      ==  \exists i \in [0..getNbDownCommands()-1] { getDownCommand(i) == cmd }	
-		// TODO
-		
+
+		// inv: hasUpCommand(Integer cmd) 
+		//      ==  \exists i \in [0..getNbUpCommands()-1] { getUpCommand(i) == cmd }
+		 cmd1 = getDownCommand(rand.nextInt(getNbDownCommands()));
+		 cmd2 = cmd1 * 2;
+		 cmd3 = cmd1 / 2;
+		if(hasDownCommand(cmd1)){
+			boolean pres = false;
+			for(int i = 0 ; i < getNbDownCommands(); i++){
+				if(getDownCommand(i) == cmd1) pres = true;
+			}
+
+			if(!pres){
+				throw new InvariantError("Commande innacessible");
+			}
+		}
+
+		if(hasDownCommand(cmd2)){
+			boolean pres2 = false;
+			for(int i = 0 ; i < getNbDownCommands(); i++){
+				if(getDownCommand(i) == cmd2) pres2 = true;
+			}
+
+			if(!pres2){
+				throw new InvariantError("Commande innacessible");
+			}
+		}
+
+		if(hasDownCommand(cmd3)){
+			boolean pres3 = false;
+			for(int i = 0 ; i < getNbDownCommands(); i++){
+				if(getDownCommand(i) == cmd3) pres3 = true;
+			}
+
+			if(!pres3){
+				throw new InvariantError("Commande innacessible");
+			}
+		}
+
 		// inv: forall i:Integer \in [0..getNbUpCommands()-1] {
 		//          getUpCommand(i) < getUpCommand(i+1)
 		//      }
@@ -26,7 +102,7 @@ public class CommandsContract extends CommandsDecorator {
 				throw new InvariantError("Les commands de montée ne sont pas strictement croissantes");
 			}
 		}
-		
+
 		// inv: forall i:Integer \in [0..getNbDownCommands()-1] {
 		//          getDownCommand(i) > getDownCommand(i+1)
 		//      }
@@ -35,14 +111,14 @@ public class CommandsContract extends CommandsDecorator {
 				throw new InvariantError("Les commands de descente ne sont pas strictement décroissantes");
 			}
 		}
-		
+
 		// inv: getNextUpCommand() == getUpCommand(0)
 		if(getNbUpCommands() > 0) {
 			if(!(getNextUpCommand() == getUpCommand(0))) {
 				throw new InvariantError("La première commande de montée est invalide");
 			}
 		}
-		
+
 		// inv: getNextDownCommand() == getDownCommand(0)
 		if(getNbDownCommands() > 0) {
 			if(!(getNextDownCommand() == getDownCommand(0))) {
@@ -51,8 +127,8 @@ public class CommandsContract extends CommandsDecorator {
 		}
 
 	}
-	
-	
+
+
 	@Override
 	public Integer getNextUpCommand() {
 		// pre: getNbUpCommands() > 0
@@ -92,7 +168,7 @@ public class CommandsContract extends CommandsDecorator {
 		// run
 		return super.getDownCommand(index);
 	}
-	
+
 	@Override
 	public boolean hasUpCommand(Integer cmd) {
 		// pre: cmd >= 0
@@ -112,7 +188,7 @@ public class CommandsContract extends CommandsDecorator {
 		// run
 		return super.hasDownCommand(cmd);
 	}
-	
+
 	@Override
 	public void init() {
 		// inv@pre
@@ -130,7 +206,7 @@ public class CommandsContract extends CommandsDecorator {
 			throw new PostconditionError("Il y a des commandes en descente");
 		}
 	}
-	
+
 	@Override
 	public void addUpCommand(Integer cmd) {
 		// pre: cmd >= 0
@@ -145,6 +221,13 @@ public class CommandsContract extends CommandsDecorator {
 		int getNbUpCommands_atPre = getNbUpCommands();
 		// inv@pre
 		checkInvariant();
+		
+		//Capture
+		int[] upcmds_atpre = new int[getNbUpCommands()] ;
+		for(int i = 0; i < getNbUpCommands(); i++){
+			upcmds_atpre[i] = getUpCommand(i);
+		}
+		
 		// run
 		super.addUpCommand(cmd);
 		// inv@post
@@ -164,7 +247,25 @@ public class CommandsContract extends CommandsDecorator {
 		 *            }
 		 *       }
 		 */
-		// TODO
+		Random rand = new Random();
+		Boolean b = false;
+		int j = rand.nextInt(getNbUpCommands());
+		for(int i = 0 ; i< j-1; j++){
+			if(getUpCommand(i)!=upcmds_atpre[i] || !(getUpCommand(i) < getUpCommand(i+1)) ){
+				throw new PostconditionError("Le nombre de commandes de montée décalé");
+			}
+			if(getUpCommand(i)==cmd){
+				b = true;
+			}
+			if(getUpCommand(getNbUpCommands())==cmd){
+				b = true;
+			}
+			
+			if(!b){
+				throw new PostconditionError("Le nombre de commandes de montée décalé");
+			}
+			
+		}
 	}
 
 	@Override
@@ -181,6 +282,13 @@ public class CommandsContract extends CommandsDecorator {
 		int getNbDownCommands_atPre = getNbDownCommands();
 		// inv@pre
 		checkInvariant();
+		
+		//Capture
+		int[] dwcmds_atpre = new int[getNbDownCommands()] ;
+		for(int i = 0; i < getNbDownCommands(); i++){
+			dwcmds_atpre[i] = getDownCommand(i);
+		}
+		
 		// run
 		super.addDownCommand(cmd);
 		// inv@post
@@ -201,8 +309,28 @@ public class CommandsContract extends CommandsDecorator {
 		 *       }
 		 */
 		// TODO
+		
+		Random rand = new Random();
+		Boolean b = false;
+		int j = rand.nextInt(getNbDownCommands());
+		for(int i = 0 ; i< j-1; j++){
+			if(getDownCommand(i)!=dwcmds_atpre[i] || !(getDownCommand(i) < getDownCommand(i+1)) ){
+				throw new PostconditionError("Le nombre de commandes de descente décalé");
+			}
+			if(getDownCommand(i)==cmd){
+				b = true;
+			}
+			if(getDownCommand(getNbDownCommands())==cmd){
+				b = true;
+			}
+			
+			if(!b){
+				throw new PostconditionError("Le nombre de commandes de descente décalé");
+			}
+			
+		}
 	}
-	
+
 	@Override
 	public void endUpCommand() {
 		// pre: getNbUpCommands() > 0
@@ -213,6 +341,13 @@ public class CommandsContract extends CommandsDecorator {
 		int getNbUpCommands_atPre = getNbUpCommands();
 		// inv@pre
 		checkInvariant();
+		
+		//Capture
+		int[] upcmds_atpre = new int[getNbUpCommands()] ;
+		for(int i = 0; i < getNbUpCommands(); i++){
+			upcmds_atpre[i] = getUpCommand(i);
+		}
+			
 		// run
 		super.endUpCommand();
 		// inv@post
@@ -225,7 +360,13 @@ public class CommandsContract extends CommandsDecorator {
 		 *          getUpCommand(i) == getUpCommand(i+1)@pre
 		 *       }
 		 */
-		// TODO
+		
+		for(int i = 0; i < getNbUpCommands() ; i++){
+			if(getUpCommand(i)!=upcmds_atpre[i+1]){
+				throw new PostconditionError("Le nombre de commandes de montée n'est pas décalé");
+			}
+		}
+		
 	}
 
 	@Override
@@ -238,6 +379,12 @@ public class CommandsContract extends CommandsDecorator {
 		int getNbDownCommands_atPre = getNbDownCommands();
 		// inv@pre
 		checkInvariant();
+		//Capture
+		int[] dwcmds_atpre = new int[getNbDownCommands()] ;
+		for(int i = 0; i < getNbDownCommands(); i++){
+			dwcmds_atpre[i] = getDownCommand(i);
+		}
+		
 		// run
 		super.endDownCommand();
 		// inv@post
@@ -250,6 +397,10 @@ public class CommandsContract extends CommandsDecorator {
 		 *          getDownCommand(i) == getDownCommand(i+1)@pre
 		 *       }
 		 */
-		// TODO
+		for(int i = 0; i < getNbDownCommands() ; i++){
+			if(getDownCommand(i)!=dwcmds_atpre[i+1]){
+				throw new PostconditionError("Le nombre de commandes de descente n'est pas décalé");
+			}
+		}
 	}
 }

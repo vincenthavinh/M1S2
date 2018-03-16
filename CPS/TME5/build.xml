@@ -43,7 +43,7 @@
 
   <target name="test2" depends="compile"
           description="test of second implementation">
-    <echo>================ Run first test ================</echo>
+    <echo>================ Run second test ================</echo>
     <junit printsummary="yes">
       <classpath>
         <pathelement location="${build}"/>
@@ -60,7 +60,7 @@
 
   <target name="test3" depends="compile"
           description="test of third implementation">
-    <echo>================ Run first test ================</echo>
+    <echo>================ Run third test ================</echo>
     <junit printsummary="yes">
       <classpath>
         <pathelement location="${build}"/>
@@ -78,8 +78,8 @@
   <target name="dist" depends="init,clean"
         description="Generer la distribution" >
     <!-- tout mettre dans l'archive -->
-    <jar basedir="." jarfile="../TME5-LiftModel-${nom1}-${nom2}-${DSTAMP}.jar"
-    includes="${src}/**/*" excludes="**/CVS"/>
+    <jar basedir=".." jarfile="../TME5-LiftModel-${nom1}-${nom2}-${DSTAMP}.jar"
+    includes="TME5/**/*" excludes="**/CVS"/>
   </target>
 
   <target name="clean"
