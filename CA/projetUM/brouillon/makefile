@@ -1,4 +1,3 @@
-
 um: um.c makefile
 	gcc -Wall -m32 -O3 -fomit-frame-pointer $< -o $@
 
