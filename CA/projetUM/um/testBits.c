@@ -18,16 +18,38 @@ void printBits(size_t const size, void const * const ptr)
             printf("%u", byte);
         }
     }
-    puts("");
+    //puts("");
 }
 
 int main(int argv, char* argc[])
 {
-        int i = 23;
-        uint ui = UINT_MAX;
-        float f = 23.45f;
-        printBits(sizeof(i), &i);
+
+        uint ui = 36542;
         printBits(sizeof(ui), &ui);
-        printBits(sizeof(f), &f);
+        printf(" : %u\n", ui);
+
+        /*uint ui1 = ui >>2;
+        printBits(sizeof(ui1), &ui1);
+        printf(" : %u\n", ui1);*/
+
+        /* https://stackoverflow.com/questions/10493411/what-is-bit-masking */
+
+        /* on veut recuperer le registre C:
+         * on enleve les 6 premiers bits de poids faible avec >>6.
+         * => les 3 bits voulus sont tout à droite.
+         * puis on passe les 32-3 = 29 bits de poids fort à 0 en 
+         * appliquant le bon masque de bits. ici : 
+         * 000...29 fois...0111. <=> 7 en décimal.
+         * il ne reste plus que les 3 bits voulus. */
+        uint c = ui>>6; 
+
+        printBits(sizeof(c), &c);
+        printf(" : %u\n", c);
+
+        c = c & 7; 
+
+        printBits(sizeof(c), &c);
+        printf(" : %u\n", c);
+
         return 0;
 }
