@@ -24,7 +24,7 @@ void printBits(size_t const size, void const * const ptr)
 int main(int argv, char* argc[])
 {
 
-        uint ui = 36542;
+        uint ui = 3221225520;
         printBits(sizeof(ui), &ui);
         printf(" : %u\n", ui);
 
@@ -50,6 +50,11 @@ int main(int argv, char* argc[])
 
         printBits(sizeof(c), &c);
         printf(" : %u\n", c);
+
+        /*Tests pour operateur 13*/
+        uint value_A = (ui) & 33554431;
+        printBits(sizeof(value_A), &value_A);
+        printf(" : %u\n", value_A);
 
         return 0;
 }

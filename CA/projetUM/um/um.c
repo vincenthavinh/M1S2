@@ -64,6 +64,8 @@ int main(int argc, char *argv[]){
         /*declarations de quelques variables utilisees dans le switch*/
         uint* tab;
         uint offset;
+        unsigned int console = NULL;
+        uint value_A;
 
     	/*switch case sur les differents operateurs.*/
     	switch(num_op){
@@ -107,22 +109,42 @@ int main(int argc, char *argv[]){
     			break;
 
     		case 8: /*Allocation*/
-                
+                /*utilisation de calloc pour initialiser a 0.*/
+                tab = (uint*) calloc (registre[id_C],  sizeof(uint));
+                registre[id_B] = (uint) tab;
     			break;
 
     		case 9: /*Abandon*/
+                tab = (uint*) registre[id_C];
+                free(tab);
     			break;
 
     		case 10: /*Sortie*/
+                /* man : fputc() writes the character c, cast to an unsigned char, to stream.*/
+                fputc(registre[id_C], stdout);
     			break;
 
     		case 11: /*Entree*/
+                console = fgetc(stdin);
+                if(console == EOF) registre[id_C] = 4294967295;
+                else registre[id_C] = console;
     			break;
 
     		case 12: /*Chargement de programme*/
-    			break;
+
+                /*copie du tableau que le registre B pointe.*/
+
+                break;
 
     		case 13: /*Orthographe*/
+                /*on recupere l'identificateur de A : les 3 bits de poids
+                 *fort apres ceux du numero de l'operateur*/
+                id_A = (plat_act >> 25) & 7;
+                /*on recupere la valeur a chargee : les 25 bits de poids faibles.
+                 *on se sert pour cela du masque 0000000111..25 fois..11 <=> 33554431*/
+                value_A = (plat_act) & 33554431;
+                registre[id_A] = value_A;
+                printf("plateau: %u, A: %u, value: %u\n", plat_act, id_A, value_A);
     			break;
     	}
 
