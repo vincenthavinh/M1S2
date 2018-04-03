@@ -56,5 +56,12 @@ int main(int argv, char* argc[])
         printBits(sizeof(value_A), &value_A);
         printf(" : %u\n", value_A);
 
+        /*trouver Endianness de la machine*/
+        int num = 1;
+        if (*(char *)&num == 1)
+            printf("Little-Endian\n");
+        else
+            printf("Big-Endian\n");
+
         return 0;
 }

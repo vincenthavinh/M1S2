@@ -1,6 +1,25 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+
+
+/*typedef d'un tableau de plateaux*/
+typedef struct tableau_struct{
+    uint taille_plateaux;
+    uint* plateau;
+}tableau;
+
+
+/*fichier lu.*/
+FILE* f;
+/*pointeur sur le tableau contenant le programme.*/
+tableau* prog;
+/*les 8 registres a capacite d'un plateau chacun, initialises a 0.*/
+uint registre[8] = {0};
+/*indice d'execution du programme*/
+int i;
+
 
 int main(int argc, char *argv[]){
 	/*on verifie qu'un unsigned int soit bien code sur 4 octets.*/
@@ -8,8 +27,15 @@ int main(int argc, char *argv[]){
 		printf("Erreur: sizeof(uint) != 4 actuellement.\n");
 		return 1;
 	}
+
+    /*on verifie qu'un pointeur sur le type tableau soit bien code sur 4 octets.*/
+    if(sizeof(tableau*)!=4){
+        printf("Erreur: sizeof(tableau*) != 4 actuellement.\n");
+        return 1;
+    }
+
 	/*on ouvre le fichier en lecture binaire.*/
-	FILE* f = fopen(argv[1],"rb");
+	f = fopen(argv[1],"rb");
 	
 	if(f==NULL){
 		printf("Erreur: fopen() retourne NULL. verifier nom fichier.\n");
@@ -22,27 +48,42 @@ int main(int argc, char *argv[]){
 	long taille_octets = ftell(f);
 	rewind(f);
 	long taille_uints = taille_octets >> 2;
-	printf("%ld\n", taille_uints);
 
-	/*on alloue le pointeur sur le tableau 'O' qui contiendra le programme.
-	 *ce "tableau" stocke des "plateaux" de 32 bits chacun <-> 4 octets <-> 1 uint.
-	 *on cree donc un tableau de uints.*/
-    uint* prog = (uint*) malloc (taille_uints*sizeof(uint)); 
+	/*on alloue le tableau 'O' qui contiendra le programme.*/
+    prog = (tableau*) malloc (sizeof(tableau));
+    prog->taille_plateaux = taille_uints;
+    prog->plateau = (uint*) malloc (prog->taille_plateaux * sizeof(uint));
 
-    /*On dump le programme binaire dans le tableau 'O' uint par uint*/
-    fread(prog, sizeof(uint), taille_uints, f);
+    /*On dump le programme binaire dans le tableau 'O',
+     *Selon l'Endianness de la machine:*/
+    int num = 1;
+    if (*(char *)&num == 1){
+        /*Machine en Little-Endian.
+         *on recupere uint par uint ( <=> plateau par plateau ),
+         *et on inverse l'ordre des octets pour chaque uint.
+         * https://stackoverflow.com/a/13001446 */
+        uint bytes[4];
+        int j = 0;
+        while ( fread(bytes, 4, 1,f) != 0) {
+            int sum = (int)bytes[0] | (int)bytes[1]<<8 | (int)bytes[2]<<16 | (int)bytes[3]<<24;
+            prog->plateau[j] = sum;
+            j++;
+        }
+    }
+    else{
+        /*Machine en Big-Endian. Pas de conversion a faire.
+         *Cas pas encore teste.*/
+        fread(prog->plateau, sizeof(uint), prog->taille_plateaux, f);
+    }
 
     /*FILE* t = fopen("test.umz","wb");
-    fwrite(prog, sizeof(uint), taille_uints, t);*/
+     *fwrite(prog, sizeof(uint), taille_uints, t);*/
 
-    /*on declare et initialise les 8 registres a 0.*/
-    uint registre[8] = {0};
+    /*on place l'indice d'execution sur l'index du 1er plateau du programme.*/
+    i = 0;
 
-    /*on place l'indice d'execution sur le premier plateau.*/
-    int i = 0;
-
-    while(1){
-    	uint plat_act = prog[i];
+    while(i<20){
+    	uint plat_act = prog->plateau[i];
 
     	/*on recupere les 4 bits de poids forts du plateau actuel.
     	 *c'est le numero de l'operateur.*/
@@ -62,7 +103,8 @@ int main(int argc, char *argv[]){
     	i++;
 
         /*declarations de quelques variables utilisees dans le switch*/
-        uint* tab;
+        tableau* tab;
+        tableau* copie;
         uint offset;
         unsigned int console = NULL;
         uint value_A;
@@ -75,15 +117,15 @@ int main(int argc, char *argv[]){
     			break;
 
     		case 1: /*Indice de tableau*/
-                tab = (uint*) registre[id_B];
+                tab = (tableau*) registre[id_B];
                 offset = registre[id_C];
-                registre[id_A] = tab[offset];
+                registre[id_A] = tab->plateau[offset];
     			break;
 
     		case 2: /*Modification de tableau*/
-                tab = (uint*) registre[id_A];
+                tab = (tableau*) registre[id_A];
                 offset = registre[id_B];
-                tab[offset] = registre[id_C];
+                tab->plateau[offset] = registre[id_C];
     			break;
 
     		case 3: /*Addition*/
@@ -104,24 +146,28 @@ int main(int argc, char *argv[]){
     			break;
 
     		case 7: /*Stop*/
-                printf("Fin du programme");
+                printf("\n[Fin du programme]\n");
                 return 0;
     			break;
 
     		case 8: /*Allocation*/
+                tab = (tableau*) malloc (sizeof(tableau));
+                tab->taille_plateaux = registre[id_C];
                 /*utilisation de calloc pour initialiser a 0.*/
-                tab = (uint*) calloc (registre[id_C],  sizeof(uint));
+                tab->plateau = (uint*) calloc (tab->taille_plateaux, sizeof(uint));
                 registre[id_B] = (uint) tab;
     			break;
 
     		case 9: /*Abandon*/
-                tab = (uint*) registre[id_C];
+                tab = (tableau*) registre[id_C];
+                free(tab->plateau);
                 free(tab);
     			break;
 
     		case 10: /*Sortie*/
                 /* man : fputc() writes the character c, cast to an unsigned char, to stream.*/
                 fputc(registre[id_C], stdout);
+                fflush(stdout);
     			break;
 
     		case 11: /*Entree*/
@@ -131,9 +177,26 @@ int main(int argc, char *argv[]){
     			break;
 
     		case 12: /*Chargement de programme*/
+                /*Seulement quand le registre B ne pointe pas sur null*/
+                if(registre[id_B] != 0){
 
-                /*copie du tableau que le registre B pointe.*/
+                    tab = (tableau*) registre[id_B];
 
+                    /*creation de la copie*/
+                    copie = (tableau*) malloc (sizeof(tableau));
+                    copie->taille_plateaux = tab->taille_plateaux;
+                    copie->plateau = (uint*) malloc (copie->taille_plateaux * sizeof(uint));
+                    memcpy(copie, tab, copie->taille_plateaux * 4); //3e arg en octets
+
+                    /*remplacement*/
+                    free(prog->plateau);
+                    free(prog);
+                    prog = copie;
+
+                }
+
+                /*positionnement de l'indice d'execution*/
+                i = registre[id_C];
                 break;
 
     		case 13: /*Orthographe*/
@@ -144,8 +207,11 @@ int main(int argc, char *argv[]){
                  *on se sert pour cela du masque 0000000111..25 fois..11 <=> 33554431*/
                 value_A = (plat_act) & 33554431;
                 registre[id_A] = value_A;
-                printf("plateau: %u, A: %u, value: %u\n", plat_act, id_A, value_A);
+                //printf("plateau: %u, A: %u, value: %u\n", plat_act, id_A, value_A);
     			break;
+
+            default:
+                printf("PROBLEME OPERATEUR\n");
     	}
 
 	    if(!(i<taille_uints)){
