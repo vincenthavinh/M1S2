@@ -52,20 +52,21 @@ int main(int argc, char *argv[]){
 	/*on alloue le tableau 'O' qui contiendra le programme.*/
     prog = (tableau*) malloc (sizeof(tableau));
     prog->taille_plateaux = taille_uints;
-    prog->plateau = (uint*) malloc (prog->taille_plateaux * sizeof(uint));
+    prog->plateau = (uint*) calloc (prog->taille_plateaux, sizeof(uint));
 
     /*On dump le programme binaire dans le tableau 'O',
      *Selon l'Endianness de la machine:*/
     int num = 1;
-    if (*(char *)&num == 1){
+    if ((*(char *)&num == 1)){
         /*Machine en Little-Endian.
          *on recupere uint par uint ( <=> plateau par plateau ),
          *et on inverse l'ordre des octets pour chaque uint.
          * https://stackoverflow.com/a/13001446 */
+        printf("Conversion\n");
         uint bytes[4];
         int j = 0;
         while ( fread(bytes, 4, 1,f) != 0) {
-            int sum = (int)bytes[0] | (int)bytes[1]<<8 | (int)bytes[2]<<16 | (int)bytes[3]<<24;
+            uint sum = bytes[0] | bytes[1]<<8 | bytes[2]<<16 | bytes[3]<<24;
             prog->plateau[j] = sum;
             j++;
         }
@@ -73,6 +74,7 @@ int main(int argc, char *argv[]){
     else{
         /*Machine en Big-Endian. Pas de conversion a faire.
          *Cas pas encore teste.*/
+        printf("Pas de conversion\n");
         fread(prog->plateau, sizeof(uint), prog->taille_plateaux, f);
     }
 
@@ -82,7 +84,7 @@ int main(int argc, char *argv[]){
     /*on place l'indice d'execution sur l'index du 1er plateau du programme.*/
     i = 0;
 
-    while(i<20){
+    while(i<50){
     	uint plat_act = prog->plateau[i];
 
     	/*on recupere les 4 bits de poids forts du plateau actuel.
@@ -95,8 +97,8 @@ int main(int argc, char *argv[]){
         uint id_B = (plat_act >> 3) & 7;
         uint id_C = (plat_act) & 7;
 		
-		printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
-            i, plat_act, num_op, id_A, id_B, id_C);
+		//printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
+          //  i, plat_act, num_op, id_A, id_B, id_C);
     	
     	/*on avance l'indice d'execution avant de traiter le plateau actuel,
     	 *comme precise dans l'enonce.*/
