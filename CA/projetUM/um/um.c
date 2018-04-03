@@ -55,28 +55,34 @@ int main(int argc, char *argv[]){
     prog->plateau = (uint*) calloc (prog->taille_plateaux, sizeof(uint));
 
     /*On dump le programme binaire dans le tableau 'O',
-     *Selon l'Endianness de la machine:*/
-    int num = 1;
-    if ((*(char *)&num == 1)){
-        /*Machine en Little-Endian.
-         *on recupere uint par uint ( <=> plateau par plateau ),
-         *et on inverse l'ordre des octets pour chaque uint.
-         * https://stackoverflow.com/a/13001446 */
-        printf("Conversion\n");
-        uint bytes[4];
-        int j = 0;
-        while ( fread(bytes, 4, 1,f) != 0) {
-            uint sum = bytes[0] | bytes[1]<<8 | bytes[2]<<16 | bytes[3]<<24;
-            prog->plateau[j] = sum;
+     *on recupere uint par uint ( <=> plateau par plateau ),
+     *et on inverse l'ordre des octets pour chaque uint.
+     * https://stackoverflow.com/a/13001446 */
+    printf("Conversion\n");
+    /*uint bytes[4];
+    int j = 0;
+    int k=0;
+    while ( fread(bytes, 4, 1,f) != 0) {
+        uint sum = bytes[0]<<24 | bytes[1]<<16 | bytes[2]<<8 | bytes[3];
+        prog->plateau[j] = sum;
+        if(k<=2){printf("%u\n", sum);k++;};
+        j++;
+    }*/
+    int a;
+    int n = 4;
+    int j= 0;
+    int k =0;
+    while(EOF!= (a=fgetc(f))){
+        if(!n--){
             j++;
+            n = 3;
         }
+        prog->plateau[j] <<=8;
+        prog->plateau[j]  |=a;
+        if(k<=2){printf("%u\n", prog->plateau[j]);k++;};
     }
-    else{
-        /*Machine en Big-Endian. Pas de conversion a faire.
-         *Cas pas encore teste.*/
-        printf("Pas de conversion\n");
-        fread(prog->plateau, sizeof(uint), prog->taille_plateaux, f);
-    }
+    printf("t: %u\n", prog->taille_plateaux);
+    printf("j: %d\n", j);
 
     /*FILE* t = fopen("test.umz","wb");
      *fwrite(prog, sizeof(uint), taille_uints, t);*/
@@ -91,14 +97,24 @@ int main(int argc, char *argv[]){
     	 *c'est le numero de l'operateur.*/
     	int num_op = plat_act >> 28;
 
-        /*on recupere les identificateurs des registres A B et C du plateau actuel.
-         *voir commentaires dans testBits.c pour explications.*/
-        uint id_A = (plat_act >> 6) & 7;
-        uint id_B = (plat_act >> 3) & 7;
-        uint id_C = (plat_act) & 7;
-		
-		//printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
-          //  i, plat_act, num_op, id_A, id_B, id_C);
+        /*on recupere les identificateurs des registres a utiliser selon l'operateur*/
+        uint id_A, id_B, id_C;
+        if(num_op !=13){
+            /*on recupere les identificateurs des registres A B et C du plateau actuel.
+             *voir commentaires dans testBits.c pour explications.*/
+            id_A = (plat_act >> 6) & 7;
+            id_B = (plat_act >> 3) & 7;
+            id_C = (plat_act) & 7;
+            printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
+                i, plat_act, num_op, id_A, id_B, id_C);
+        }else{
+            /*on recupere l'identificateur de A : les 3 bits de poids
+            *fort apres ceux du numero de l'operateur*/
+            id_A = (plat_act >> 25) & 7;
+
+            printf("i: %d, plat: %u, num_op: %d, A: %u\n", 
+            i, plat_act, num_op, id_A);
+        }
     	
     	/*on avance l'indice d'execution avant de traiter le plateau actuel,
     	 *comme precise dans l'enonce.*/
@@ -180,6 +196,7 @@ int main(int argc, char *argv[]){
 
     		case 12: /*Chargement de programme*/
                 /*Seulement quand le registre B ne pointe pas sur null*/
+                printf("b: %u\n", registre[id_B]);
                 if(registre[id_B] != 0){
 
                     tab = (tableau*) registre[id_B];
@@ -189,22 +206,21 @@ int main(int argc, char *argv[]){
                     copie->taille_plateaux = tab->taille_plateaux;
                     copie->plateau = (uint*) malloc (copie->taille_plateaux * sizeof(uint));
                     memcpy(copie, tab, copie->taille_plateaux * 4); //3e arg en octets
-
+                    printf("tab: %u\n",tab->plateau[3]);
+                    printf("copie: %u\n",copie->plateau[3]);
                     /*remplacement*/
                     free(prog->plateau);
                     free(prog);
                     prog = copie;
+                    printf("prog: %u\n",prog->plateau[3]);
 
                 }
-
+                printf("fin 12\n");
                 /*positionnement de l'indice d'execution*/
                 i = registre[id_C];
                 break;
 
     		case 13: /*Orthographe*/
-                /*on recupere l'identificateur de A : les 3 bits de poids
-                 *fort apres ceux du numero de l'operateur*/
-                id_A = (plat_act >> 25) & 7;
                 /*on recupere la valeur a chargee : les 25 bits de poids faibles.
                  *on se sert pour cela du masque 0000000111..25 fois..11 <=> 33554431*/
                 value_A = (plat_act) & 33554431;
@@ -216,7 +232,7 @@ int main(int argc, char *argv[]){
                 printf("PROBLEME OPERATEUR\n");
     	}
 
-	    if(!(i<taille_uints)){
+	    if(!(i<prog->taille_plateaux)){
 	    	printf("Erreur: indice execution >= indice max des plateaux du programme\n");
 	    	return 1;
 	    }

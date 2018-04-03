@@ -24,13 +24,22 @@ void printBits(size_t const size, void const * const ptr)
 int main(int argv, char* argc[])
 {
 
-        uint ui = 3221225520;
+        uint ui = 3221225540;
         printBits(sizeof(ui), &ui);
         printf(" : %u\n", ui);
 
-        /*uint ui1 = ui >>2;
+        uint ui1 = ui <<24;
         printBits(sizeof(ui1), &ui1);
-        printf(" : %u\n", ui1);*/
+        printf(" : %u\n", ui1);
+
+        ui1 = ui1 | 7;
+        printBits(sizeof(ui1), &ui1);
+        printf(" : %u\n", ui1);
+
+        ui1 = 0;
+        printBits(sizeof(ui1), &ui1);
+        printf(" : %u\n", ui1);
+
 
         /* https://stackoverflow.com/questions/10493411/what-is-bit-masking */
 
@@ -63,5 +72,7 @@ int main(int argv, char* argc[])
         else
             printf("Big-Endian\n");
 
+
+        //uint sum = bytes[0] | bytes[1]<<8 | bytes[2]<<16 | bytes[3]<<24;
         return 0;
 }
