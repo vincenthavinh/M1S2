@@ -58,14 +58,23 @@ int main (int argc, char ** argv) {
 #  define a (w >> 6) & 7
 
   /* spin cycle */
-  for(;;) {
-    uint w = zero[ip++];
+  int z;
+  for(z=0;z<20;z++) {
+    uint w = zero[ip];
 
     /*
     int c = w & 7;
     int b = (w >> 3) & 7;
     int a = (w >> 6) & 7;
     */
+    if((w >> 28)!=13){
+        printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
+          ip, w, (w >> 28), a, b, c);
+    }else{
+        printf("i: %d, plat: %u, num_op: %d, A: %u", 
+          ip, w, (w >> 28), (7 & (w >> 25)));
+    }
+    ip++;
 
     switch(w >> 28) {
     case 0: if (reg[c]) reg[a] = reg[b]; break;
@@ -81,6 +90,7 @@ int main (int argc, char ** argv) {
     case 10: putchar(reg[c]); fflush(stdout); break;
     case 11: reg[c] = getchar(); break;
     case 12:
+      printf("b: %u\n", reg[b]);
       if (reg[b]) {
 	ufree(zero);
 	int size = ((uint*)reg[b])[-1];
@@ -88,8 +98,12 @@ int main (int argc, char ** argv) {
 	memcpy(zero, (uint*)reg[b], size * 4);
       }
       ip = reg[c]; 
+      printf("fin 12\n");
       break;
-    case 13: reg[7 & (w >> 25)] = w & 0177777777; break;
+    case 13: 
+      reg[7 & (w >> 25)] = w & 0177777777; 
+      printf(", v: %u\n", reg[7 & (w >> 25)]);
+      break;
     }
   }
 }
