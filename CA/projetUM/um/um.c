@@ -118,7 +118,8 @@ int main(int argc, char *argv[]){
     	i++;
 
         /*declarations de quelques variables utilisees dans le switch*/
-        tableau* tab;;
+        tableau* tab;
+        tableau* copie;
         uint offset;
         unsigned int console = NULL;
         uint value_A;

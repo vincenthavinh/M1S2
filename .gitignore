@@ -42,12 +42,12 @@ CA/TME4/code/Java/intereval
 CA/TME4/code/Java/ml2java
 CA/TME4/code/Java/*.class
 
-CA/projetUM/*.cmi
-CA/projetUM/*.cmo
-CA/projetUM/*.mli
-CA/projetUM/prog
-CA/projetUM/lexer.ml
-CA/projetUM/parser.ml
+CA/projetUM/sum/*.cmo
+CA/projetUM/sum/*.cmi
+CA/projetUM/sum/toProlog
+CA/projetUM/sum/lexer.ml
+CA/projetUM/sum/parser.mli
+CA/projetUM/sum/parser.ml
 
 #CPS
 

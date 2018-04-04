@@ -60,7 +60,6 @@ int main (int argc, char ** argv) {
 #  define a (w >> 6) & 7
 
   /* spin cycle */
-  int z;
   for(;;) {
     uint w = zero[ip];
 
@@ -70,11 +69,11 @@ int main (int argc, char ** argv) {
     int a = (w >> 6) & 7;
     */
     if((w >> 28)!=13){
-        //printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
-          //ip, w, (w >> 28), a, b, c);
+        printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
+          ip, w, (w >> 28), a, b, c);
     }else{
-        //printf("i: %d, plat: %u, num_op: %d, A: %u", 
-          //ip, w, (w >> 28), (7 & (w >> 25)));
+        printf("i: %d, plat: %u, num_op: %d, A: %u\n", 
+          ip, w, (w >> 28), (7 & (w >> 25)));
     }
     ip++;
 
