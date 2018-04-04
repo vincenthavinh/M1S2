@@ -41,11 +41,13 @@ int main (int argc, char ** argv) {
     int i = 0;
     while(EOF != (a = fgetc(f))) {
       if (!n--) {
-	// test bad endianness:
-	// zero[i] = ntohl(zero[i]);
-	i++; n = 3; }
+        //printf("[i%d] %u\n", i, zero[i]);
+	       i++; 
+         n = 3; 
+      }
       zero[i] <<= 8;
       zero[i]  |= a;
+      //printf("%d ", a);
     }
   }
 
@@ -59,7 +61,7 @@ int main (int argc, char ** argv) {
 
   /* spin cycle */
   int z;
-  for(z=0;z<20;z++) {
+  for(;;) {
     uint w = zero[ip];
 
     /*
@@ -68,11 +70,11 @@ int main (int argc, char ** argv) {
     int a = (w >> 6) & 7;
     */
     if((w >> 28)!=13){
-        printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
-          ip, w, (w >> 28), a, b, c);
+        //printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
+          //ip, w, (w >> 28), a, b, c);
     }else{
-        printf("i: %d, plat: %u, num_op: %d, A: %u", 
-          ip, w, (w >> 28), (7 & (w >> 25)));
+        //printf("i: %d, plat: %u, num_op: %d, A: %u", 
+          //ip, w, (w >> 28), (7 & (w >> 25)));
     }
     ip++;
 
@@ -90,7 +92,7 @@ int main (int argc, char ** argv) {
     case 10: putchar(reg[c]); fflush(stdout); break;
     case 11: reg[c] = getchar(); break;
     case 12:
-      printf("b: %u\n", reg[b]);
+      //printf("b: %u\n", reg[b]);
       if (reg[b]) {
 	ufree(zero);
 	int size = ((uint*)reg[b])[-1];
@@ -98,11 +100,11 @@ int main (int argc, char ** argv) {
 	memcpy(zero, (uint*)reg[b], size * 4);
       }
       ip = reg[c]; 
-      printf("fin 12\n");
+      //printf("fin 12\n");
       break;
     case 13: 
       reg[7 & (w >> 25)] = w & 0177777777; 
-      printf(", v: %u\n", reg[7 & (w >> 25)]);
+      //printf(", v: %u\n", reg[7 & (w >> 25)]);
       break;
     }
   }

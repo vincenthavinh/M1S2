@@ -58,40 +58,36 @@ int main(int argc, char *argv[]){
      *on recupere uint par uint ( <=> plateau par plateau ),
      *et on inverse l'ordre des octets pour chaque uint.
      * https://stackoverflow.com/a/13001446 */
-    printf("Conversion\n");
-    /*uint bytes[4];
+    //printf("Conversion\n");
+    int bytes[4];   
     int j = 0;
-    int k=0;
-    while ( fread(bytes, 4, 1,f) != 0) {
-        uint sum = bytes[0]<<24 | bytes[1]<<16 | bytes[2]<<8 | bytes[3];
-        prog->plateau[j] = sum;
-        if(k<=2){printf("%u\n", sum);k++;};
-        j++;
-    }*/
-    int a;
-    int n = 4;
-    int j= 0;
-    int k =0;
-    while(EOF!= (a=fgetc(f))){
-        if(!n--){
-            j++;
-            n = 3;
-        }
-        prog->plateau[j] <<=8;
-        prog->plateau[j]  |=a;
-        if(k<=2){printf("%u\n", prog->plateau[j]);k++;};
-    }
-    printf("t: %u\n", prog->taille_plateaux);
-    printf("j: %d\n", j);
+    int k = 0;
 
-    /*FILE* t = fopen("test.umz","wb");
-     *fwrite(prog, sizeof(uint), taille_uints, t);*/
+    /*on stocke chaque octet lu dans une case du buffer d'octets.*/
+    while ( (bytes[k] = fgetc(f)) != EOF) {
+        k++;
+
+        /*quand on a rempli notre buffer de 4 octets lus*/
+        if(k==4){
+            //printf("[j%d]: %d %d %d %d, ", j, bytes[0], bytes[1], bytes[2], bytes[3]);
+            /*le 1er octet lu est l'octet de poids fort:
+             *      - ses 8 bits de poids faible (a droite) sont tout a gauche dans l'uint.
+             *        on decale.
+             *le dernier octet est celui de poids faible:
+             *      -ses 8 bits de poids faible (a droite) sont tout a droite dans l'uint.
+             *        pas de decalage.
+             */
+            uint plateau = (bytes[3]) | (bytes[2]<<8) | (bytes[1]<<16) | (bytes[0]<<24);
+            prog->plateau[j] = plateau;
+            //printf("[plat[j] = %u]\n", prog->plateau[j]);
+            j++;
+            k = 0;
+        }
+    }
 
     /*on place l'indice d'execution sur l'index du 1er plateau du programme.*/
     i = 0;
-    int z = 0;
-    while(z<50){
-        k++;
+    while(1){
     	uint plat_act = prog->plateau[i];
 
     	/*on recupere les 4 bits de poids forts du plateau actuel.
@@ -106,15 +102,15 @@ int main(int argc, char *argv[]){
             id_A = (plat_act >> 6) & 7;
             id_B = (plat_act >> 3) & 7;
             id_C = (plat_act) & 7;
-            printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
-                i, plat_act, num_op, id_A, id_B, id_C);
+            //printf("i: %d, plat: %u, num_op: %d, A: %u, B: %u, C: %u\n", 
+              //  i, plat_act, num_op, id_A, id_B, id_C);
         }else{
             /*on recupere l'identificateur de A : les 3 bits de poids
             *fort apres ceux du numero de l'operateur*/
             id_A = (plat_act >> 25) & 7;
 
-            printf("i: %d, plat: %u, num_op: %d, A: %u", 
-            i, plat_act, num_op, id_A);
+            //printf("i: %d, plat: %u, num_op: %d, A: %u", 
+              //  i, plat_act, num_op, id_A);
         }
     	
     	/*on avance l'indice d'execution avant de traiter le plateau actuel,
@@ -122,8 +118,7 @@ int main(int argc, char *argv[]){
     	i++;
 
         /*declarations de quelques variables utilisees dans le switch*/
-        tableau* tab;
-        tableau* copie;
+        tableau* tab;;
         uint offset;
         unsigned int console = NULL;
         uint value_A;
@@ -139,20 +134,20 @@ int main(int argc, char *argv[]){
                 if(registre[id_B] != 0){
                     /*recupere la valeur a la case offset du tableau pointe par le registre B
                     * s'il ne pointe pas sur NULL*/
-                    printf("[then] ");
+                    //printf("[then] ");
                     tab = (tableau*) registre[id_B];
                 }else{
                     /*sinon recupere la valeur a la case offset du tableau contenant le prog.*/
-                    printf("[else] ");
+                    //printf("[else] ");
                     tab = prog;
                 }
                 offset = registre[id_C];
-                printf("t_plat: %u, offset: %u\n", tab, offset);
+                //printf("t_plat: %u, offset: %u\n", tab, offset);
                 registre[id_A] = tab->plateau[offset];
     			break;
 
     		case 2: /*Modification de tableau*/
-                printf("a: %u\n", registre[id_A]);
+                //printf("a: %u\n", registre[id_A]);
                 if(registre[id_A] != 0){
                      /*modifie le tableau que pointe le registre A s'il ne pointe pas sur NULL.*/
                     tab = (tableau*) registre[id_A];
@@ -214,7 +209,7 @@ int main(int argc, char *argv[]){
 
     		case 12: /*Chargement de programme*/
                 /*Seulement quand le registre B ne pointe pas sur null*/
-                printf("b: %u\n", registre[id_B]);
+                //rintf("b: %u\n", registre[id_B]);
                 if(registre[id_B] != 0){
 
                     tab = (tableau*) registre[id_B];
@@ -223,17 +218,18 @@ int main(int argc, char *argv[]){
                     copie = (tableau*) malloc (sizeof(tableau));
                     copie->taille_plateaux = tab->taille_plateaux;
                     copie->plateau = (uint*) malloc (copie->taille_plateaux * sizeof(uint));
-                    memcpy(copie, tab, copie->taille_plateaux * 4); //3e arg en octets
-                    printf("tab: %u\n",tab->plateau[3]);
-                    printf("copie: %u\n",copie->plateau[3]);
+                    memcpy(copie->plateau, tab->plateau, copie->taille_plateaux * 4); //3e arg en octets
+                    //printf("tab: %u\n",tab->plateau[3]);
+                    //printf("copie: %u\n",copie->plateau[3]);
+
                     /*remplacement*/
                     free(prog->plateau);
                     free(prog);
                     prog = copie;
-                    printf("prog: %u\n",prog->plateau[3]);
+                    //printf("prog: %u\n",prog->plateau[3]);
 
                 }
-                printf("fin 12\n");
+                //printf("fin 12\n");
                 /*positionnement de l'indice d'execution*/
                 i = registre[id_C];
                 break;
@@ -242,7 +238,7 @@ int main(int argc, char *argv[]){
                 /*on recupere la valeur a chargee : les 25 bits de poids faibles.
                  *on se sert pour cela du masque 0000000111..25 fois..11 <=> 33554431*/
                 value_A = (plat_act) & 33554431;
-                printf(", v: %u\n", value_A);
+                //printf(", v: %u\n", value_A);
                 registre[id_A] = value_A;
                 //printf("plateau: %u, A: %u, value: %u\n", plat_act, id_A, value_A);
     			break;
