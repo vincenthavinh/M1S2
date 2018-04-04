@@ -7,6 +7,5 @@ let _ =
 	try
 		let lexbuf = Lexing.from_channel stdin in
 		let x = Parser.prog Lexer.token lexbuf in
-		print_sum_prog x;
-		print_char '\n'
+		sum_prog x
 	with Lexer.Eof -> exit 0

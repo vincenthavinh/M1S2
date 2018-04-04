@@ -121,7 +121,7 @@ int main(int argc, char *argv[]){
         tableau* tab;
         tableau* copie;
         uint offset;
-        unsigned int console = NULL;
+        uint console;
         uint value_A;
 
     	/*switch case sur les differents operateurs.*/
@@ -198,8 +198,13 @@ int main(int argc, char *argv[]){
 
     		case 10: /*Sortie*/
                 /* man : fputc() writes the character c, cast to an unsigned char, to stream.*/
-                fputc(registre[id_C], stdout);
-                fflush(stdout);
+                if(registre[id_C] < 256 ){
+                    fputc(registre[id_C], stdout);
+                    fflush(stdout);
+                }else{
+                    printf("\nErreur: affichage du registre C > 255\n");
+                    return 1;
+                }
     			break;
 
     		case 11: /*Entree*/
@@ -245,11 +250,11 @@ int main(int argc, char *argv[]){
     			break;
 
             default:
-                printf("PROBLEME OPERATEUR\n");
+                printf("\nPROBLEME OPERATEUR: %d\n", num_op);
     	}
 
 	    if(!(i<prog->taille_plateaux)){
-	    	printf("Erreur: indice execution >= indice max des plateaux du programme\n");
+	    	printf("\nErreur: indice execution >= indice max des plateaux du programme\n");
 	    	return 1;
 	    }
 
