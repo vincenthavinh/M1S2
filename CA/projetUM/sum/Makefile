@@ -22,6 +22,7 @@ clean:
 	rm -f lexer.ml
 	rm -f parser.mli
 	rm -f parser.ml
+	rm -f "test-stdin.um"
 
 cleanTemp:
 	rm -f *.cmo
@@ -29,3 +30,4 @@ cleanTemp:
 	rm -f lexer.ml
 	rm -f parser.mli
 	rm -f parser.ml
+	rm -f "test-stdin.um"
