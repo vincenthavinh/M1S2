@@ -13,6 +13,9 @@ mv -f ./sum/toSum ./tests;
 
 cd ./tests;
 
+chmod u+x um;
+chmod u+x toSum;
+
 #on compile les fichiers test*.sum en test*.um
 for file in ./*.sum 
 do

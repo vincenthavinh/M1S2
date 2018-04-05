@@ -69,7 +69,6 @@ let sum_stmt x =
 				for  i = 1 to (String.length a)-2 do
 					op13 7 (Char.code (String.get a i));
 					opABC 10 0 0 7;
-					(*print_newline ()*)
 				done
 			)
 
