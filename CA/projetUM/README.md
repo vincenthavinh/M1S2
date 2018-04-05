@@ -50,5 +50,5 @@ ce script :
 	-compare chaque sortie produite test*.um.out à la sortie attendue
 	 test.output
 	-propose de supprimer les fichiers temporaires produits dans ./tests
-  
 
+.

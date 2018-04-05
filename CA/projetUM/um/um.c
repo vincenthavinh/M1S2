@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
 	fseek(f, 0, SEEK_END);
 	long taille_octets = ftell(f);
 	rewind(f);
-	long taille_uints = taille_octets >> 2;
+	long taille_uints = taille_octets / 4;
 
 	/*on alloue le tableau 'O' qui contiendra le programme.*/
     prog = (tableau*) malloc (sizeof(tableau));
@@ -149,7 +149,7 @@ int main(int argc, char *argv[]){
                 //printf("plateau: %u, A: %u, value: %u\n", plat_act, id_A, value_A);
                 break;
 
-            case 12: /*Chargement de programme*/
+            case 12: /*Chargement de programme / jump*/
                 /*Seulement quand le registre B ne pointe pas sur null*/
                 //rintf("b: %u\n", registre[id_B]);
                 if(registre[id_B] != 0){
