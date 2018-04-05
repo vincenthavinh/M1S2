@@ -3,7 +3,6 @@
 #include <math.h>
 #include <string.h>
 
-
 /*typedef d'un tableau de plateaux*/
 typedef struct tableau_struct{
     uint taille_plateaux;
@@ -22,6 +21,7 @@ int i;
 
 
 int main(int argc, char *argv[]){
+    /*VERIFICATIONS COMPATIBILITE*/
 	/*on verifie qu'un unsigned int soit bien code sur 4 octets.*/
 	if(sizeof(uint)!=4){
 		printf("Erreur: sizeof(uint) != 4 actuellement.\n");
@@ -33,6 +33,8 @@ int main(int argc, char *argv[]){
         printf("Erreur: sizeof(tableau*) != 4 actuellement.\n");
         return 1;
     }
+
+    /*PHASE D'INITIALISATION DE LA MACHINE UNIVERSELLE*/
 
 	/*on ouvre le fichier en lecture binaire.*/
 	f = fopen(argv[1],"rb");
@@ -87,6 +89,8 @@ int main(int argc, char *argv[]){
 
     /*on place l'indice d'execution sur l'index du 1er plateau du programme.*/
     i = 0;
+
+    /*BOUCLE DE LECTURE DU PROGRAMME .UM*/
     while(1){
     	uint plat_act = prog->plateau[i];
 
@@ -178,7 +182,6 @@ int main(int argc, char *argv[]){
     			break;
 
     		case 7: /*Stop*/
-                printf("\n[Fin du programme]\n");
                 return 0;
     			break;
 

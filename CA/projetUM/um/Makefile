@@ -3,5 +3,5 @@ um: um.c
 
 test: testBits.c
 	gcc -g -Wall -m32 -o testBits testBits.c
-clean: 
+clean:
 	rm um testBits
