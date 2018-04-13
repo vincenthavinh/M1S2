@@ -1,0 +1,31 @@
+digraph p_feu {
+size="8,10";
+  GT [shape=box,style=dotted,label="feu"];
+  GT -> S38;
+	S38 -> S3  [color=black,style=dashed,label="couleur = ORANGE"];
+	S3 -> S9  [color=black,style=dashed,label="observe!couleur,clignotant"];
+	S9 -> S11  [color=black,style=dashed,label="(1)"];
+	S9 -> S38  [color=black,style=dashed,label="(1)"];
+	S11 -> S16  [color=black,style=dashed,label="couleur = RED"];
+	S16 -> S25  [color=black,style=dashed,label="(1)"];
+	S16 -> S32  [color=black,style=dashed,label="(1)"];
+	S25 -> S30  [color=black,style=dashed,label="couleur = GREEN"];
+	S30 -> S18  [color=black,style=dashed,label="(1)"];
+	S30 -> S32  [color=black,style=dashed,label="(1)"];
+	S18 -> S23  [color=black,style=dashed,label="couleur = ORANGE"];
+	S23 -> S11  [color=black,style=dashed,label="(1)"];
+	S23 -> S32  [color=black,style=dashed,label="(1)"];
+	S32 -> S33  [color=black,style=dashed,label="couleur = ORANGE"];
+	S33 -> S36  [color=black,style=dashed,label="clignotant = 1"];
+	S36 -> S32  [color=black,style=dashed,label="(1)"];
+}
+digraph p_observeur {
+size="8,10";
+  GT [shape=box,style=dotted,label="observeur"];
+  GT -> S23;
+	S23 -> S21  [color=black,style=bold,label="observe?currColor,clignote"];
+	S21 -> S23  [color=black,style=solid,label="((currColor==ORANGE))"];
+	S21 -> S23  [color=black,style=solid,label="((currColor==GREEN))"];
+	S21 -> S23  [color=black,style=solid,label="((currColor==RED))"];
+	S21 -> S23  [color=black,style=solid,label="((clignote==1))"];
+}
