@@ -1,4 +1,8 @@
 A compiler avec :
 
-gcc -o prodconsft prodconsft.c traceinstantsf.c -I /Vrac/PC2R/ft_v1.1/include/ft_v1.1 -L /Vrac/PC2R/ft_v1.1/lib/ft_v1.1 -lfthread -lpthread
+export CHEMIN=/Vrac/fthread/ft_v1.1/
+
+gcc -m32 -o nom_exe nom.c \
+       traceinstantsf.c -I $CHEMIN/ft_v1.1/include -L $CHEMIN/ft_v1.1/lib \
+       -lfthread -lpthread
 
